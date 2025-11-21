@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'login_page.dart';
 import 'home_page.dart';
 import 'grades_page.dart';
@@ -9,7 +10,7 @@ import 'academic_offer_page.dart';
 import 'academic_calendar_page.dart';
 
 void main() {
-  runApp(MyApp());
+  initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {

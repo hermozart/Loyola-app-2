@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class GradesPageModel {
+class HomePageModel {
   final unfocusNode = FocusNode();
 
   void initState(BuildContext context) {}

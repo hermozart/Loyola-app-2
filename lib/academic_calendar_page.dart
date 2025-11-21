@@ -77,73 +77,76 @@ class _AcademicCalendarPageState extends State<AcademicCalendarPage> {
               ],
             ),
           ),
-          TableCalendar(
-            firstDay: DateTime.utc(2024, 12, 1),
-            lastDay: DateTime.utc(2024, 12, 31),
-            focusedDay: _focusedDay,
-            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-            calendarFormat: CalendarFormat.month,
-            locale: 'es_ES',
-            eventLoader: getEventsForDay,
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _selectedDay = selectedDay;
-                _focusedDay = focusedDay;
-              });
-            },
-            calendarBuilders: CalendarBuilders(
-              markerBuilder: (context, date, events) {
-                if (events.isEmpty) return SizedBox();
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: events.map((e) {
-                    return Container(
-                      width: 20,
-                      height: 20,
-                      margin: EdgeInsets.symmetric(horizontal: 1),
-                      decoration: BoxDecoration(
-                        color: getEventColor(e.toString()),
-                        shape: BoxShape.circle,
-                      ),
-                    );
-                  }).toList(),
-                );
+          Expanded(
+            child: TableCalendar(
+              firstDay: DateTime.utc(2025, 12, 1),
+              lastDay: DateTime.utc(2026, 12, 31),
+              // focusedDay: _focusedDay,
+              focusedDay: DateTime.utc(2025, 12, 1),
+              // selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+              calendarFormat: CalendarFormat.month,
+              locale: 'es_ES',
+              eventLoader: getEventsForDay,
+              onDaySelected: (selectedDay, focusedDay) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                });
               },
-            ),
-            headerStyle: HeaderStyle(
-              titleCentered: true,
-              formatButtonVisible: false,
-              titleTextStyle: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF8C1D40),
+              calendarBuilders: CalendarBuilders(
+                markerBuilder: (context, date, events) {
+                  if (events.isEmpty) return SizedBox();
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: events.map((e) {
+                      return Container(
+                        width: 20,
+                        height: 20,
+                        margin: EdgeInsets.symmetric(horizontal: 1),
+                        decoration: BoxDecoration(
+                          color: getEventColor(e.toString()),
+                          shape: BoxShape.circle,
+                        ),
+                      );
+                    }).toList(),
+                  );
+                },
               ),
-              leftChevronIcon: Icon(
-                Icons.chevron_left,
-                color: Color(0xFF8C1D40),
+              headerStyle: HeaderStyle(
+                titleCentered: true,
+                formatButtonVisible: false,
+                titleTextStyle: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF8C1D40),
+                ),
+                leftChevronIcon: Icon(
+                  Icons.chevron_left,
+                  color: Color(0xFF8C1D40),
+                ),
+                rightChevronIcon: Icon(
+                  Icons.chevron_right,
+                  color: Color(0xFF8C1D40),
+                ),
               ),
-              rightChevronIcon: Icon(
-                Icons.chevron_right,
-                color: Color(0xFF8C1D40),
+              daysOfWeekStyle: DaysOfWeekStyle(
+                weekendStyle: TextStyle(color: Colors.black54),
               ),
-            ),
-            daysOfWeekStyle: DaysOfWeekStyle(
-              weekendStyle: TextStyle(color: Colors.black54),
-            ),
-            calendarStyle: CalendarStyle(
-              todayDecoration: BoxDecoration(
-                color: Color(0xFF8C1D40),
-                shape: BoxShape.circle,
+              calendarStyle: CalendarStyle(
+                todayDecoration: BoxDecoration(
+                  color: Color(0xFF8C1D40),
+                  shape: BoxShape.circle,
+                ),
+                selectedDecoration: BoxDecoration(
+                  color: Color(0xFF31B9C5),
+                  shape: BoxShape.circle,
+                ),
+                markerDecoration: BoxDecoration(
+                  color: Color(0xFF02CA79),
+                  shape: BoxShape.circle,
+                ),
+                holidayTextStyle: TextStyle(color: Colors.green),
               ),
-              selectedDecoration: BoxDecoration(
-                color: Color(0xFF31B9C5),
-                shape: BoxShape.circle,
-              ),
-              markerDecoration: BoxDecoration(
-                color: Color(0xFF02CA79),
-                shape: BoxShape.circle,
-              ),
-              holidayTextStyle: TextStyle(color: Colors.green),
             ),
           ),
           SizedBox(height: 12),

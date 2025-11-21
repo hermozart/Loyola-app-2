@@ -3,6 +3,8 @@ import 'package:loyola_app22/app_components/app_theme.dart';
 import 'package:loyola_app22/app_components/app_util.dart';
 import 'package:loyola_app22/app_components/app_widgets.dart';
 import 'package:loyola_app22/app_components/nav_extensions.dart';
+import 'package:loyola_app22/home_page.dart';
+import 'package:loyola_app22/home_page_model.dart';
 import 'dart:math';
 import 'dart:ui';
 import '/index.dart';
@@ -134,8 +136,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
             curve: Curves.easeInOut,
             delay: 0.0.ms,
             duration: 300.0.ms,
-            begin: Offset(-0.349, 0),
-            end: Offset(0, 0),
+            begin: -0.349,
+            end: 0,
           ),
         ],
       ),
@@ -638,24 +640,32 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                                 ),
                                               );
                                             } else {
-                                              if (Navigator.of(context)
-                                                  .canPop()) {
-                                                context.pop();
-                                              }
-                                              context.pushNamed(
-                                                HomePageWidget.routeName,
-                                                extra: <String, dynamic>{
-                                                  kTransitionInfoKey:
-                                                      TransitionInfo(
-                                                    hasTransition: true,
-                                                    transitionType:
-                                                        PageTransitionType
-                                                            .leftToRight,
-                                                    duration: Duration(
-                                                        milliseconds: 300),
-                                                  ),
-                                                },
+                                              // if (Navigator.of(context)
+                                              //     .canPop()) {
+                                              //   context.pop();
+                                              // }
+                                              Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return HomePageWidget();
+                                                  },
+                                                ),
                                               );
+                                              // context.pushNamed(
+                                              //   HomePageWidget.routeName,
+                                              //   extra: <String, dynamic>{
+                                              //     kTransitionInfoKey:
+                                              //         TransitionInfo(
+                                              //       hasTransition: true,
+                                              //       transitionType:
+                                              //           PageTransitionType
+                                              //               .leftToRight,
+                                              //       duration: Duration(
+                                              //           milliseconds: 300),
+                                              //     ),
+                                              //   },
+                                              // );
                                             }
                                           },
                                           text: 'Ingresar',

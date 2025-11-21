@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loyola_app22/app_components/nav_extensions.dart';
+import 'package:loyola_app22/index.dart';
 import 'package:provider/provider.dart';
 
 import 'home_page_model.dart';
@@ -16,8 +18,8 @@ export 'home_page_model.dart';
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({super.key});
 
-  static String routeName = 'HomePage';
-  static String routePath = '/homePage';
+  // static String routeName = 'HomePage';
+  // static String routePath = '/homePage';
 
   @override
   State<HomePageWidget> createState() => _HomePageWidgetState();
@@ -25,6 +27,7 @@ class HomePageWidget extends StatefulWidget {
 
 class _HomePageWidgetState extends State<HomePageWidget>
     with TickerProviderStateMixin {
+  // late HomePageModel _model;
   late HomePageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -298,323 +301,391 @@ class _HomePageWidgetState extends State<HomePageWidget>
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
                           children: [
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 8,
-                                    color: Color(0x1A000000),
-                                    offset: Offset(0.0, 2),
-                                  ),
-                                ],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(16),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.grade_rounded,
-                                      color: Color(0xFF8C1D40),
-                                      size: 32,
+                            // CALIFICACIONES
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            GradesPageWidget()));
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 8,
+                                      color: Color(0x1A000000),
+                                      offset: Offset(0.0, 2),
                                     ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      'Calificaciones',
-                                      textAlign: TextAlign.center,
-                                      style: AppTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.nunitoSans(
+                                  ],
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.grade_rounded,
+                                        color: Color(0xFF8C1D40),
+                                        size: 32,
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        'Calificaciones',
+                                        textAlign: TextAlign.center,
+                                        style: AppTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.nunitoSans(
+                                                fontWeight: FontWeight.w500,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                              ),
+                                              color: Color(0xFF333333),
+                                              fontSize: 14,
+                                              letterSpacing: 0.0,
                                               fontWeight: FontWeight.w500,
                                               fontStyle: AppTheme.of(context)
                                                   .bodyMedium
                                                   .fontStyle,
                                             ),
-                                            color: Color(0xFF333333),
-                                            fontSize: 14,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                              ).animateOnPageLoad(
+                                animationsMap['containerOnPageLoadAnimation1']!,
                               ),
-                            ).animateOnPageLoad(
-                              animationsMap['containerOnPageLoadAnimation1']!,
                             ),
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 8,
-                                    color: Color(0x1A000000),
-                                    offset: Offset(0.0, 2),
+
+                            //HORARIOS
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HorariosPageWidget(),
                                   ),
-                                ],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(16),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.schedule_rounded,
-                                      color: Color(0xFF8C1D40),
-                                      size: 32,
+                                );
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 8,
+                                      color: Color(0x1A000000),
+                                      offset: Offset(0.0, 2),
                                     ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      'Horarios',
-                                      textAlign: TextAlign.center,
-                                      style: AppTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.nunitoSans(
+                                  ],
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.schedule_rounded,
+                                        color: Color(0xFF8C1D40),
+                                        size: 32,
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        'Horarios',
+                                        textAlign: TextAlign.center,
+                                        style: AppTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.nunitoSans(
+                                                fontWeight: FontWeight.w500,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                              ),
+                                              color: Color(0xFF333333),
+                                              fontSize: 14,
+                                              letterSpacing: 0.0,
                                               fontWeight: FontWeight.w500,
                                               fontStyle: AppTheme.of(context)
                                                   .bodyMedium
                                                   .fontStyle,
                                             ),
-                                            color: Color(0xFF333333),
-                                            fontSize: 14,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                              ).animateOnPageLoad(
+                                animationsMap['containerOnPageLoadAnimation2']!,
                               ),
-                            ).animateOnPageLoad(
-                              animationsMap['containerOnPageLoadAnimation2']!,
                             ),
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 8,
-                                    color: Color(0x1A000000),
-                                    offset: Offset(0.0, 2),
-                                  ),
-                                ],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(16),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.article_rounded,
-                                      color: Color(0xFF8C1D40),
-                                      size: 32,
+
+                            // NOTICIAS
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => NewsPageWidget(),
+                                    ));
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 8,
+                                      color: Color(0x1A000000),
+                                      offset: Offset(0.0, 2),
                                     ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      'Noticias',
-                                      textAlign: TextAlign.center,
-                                      style: AppTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.nunitoSans(
+                                  ],
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.article_rounded,
+                                        color: Color(0xFF8C1D40),
+                                        size: 32,
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        'Noticias',
+                                        textAlign: TextAlign.center,
+                                        style: AppTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.nunitoSans(
+                                                fontWeight: FontWeight.w500,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                              ),
+                                              color: Color(0xFF333333),
+                                              fontSize: 14,
+                                              letterSpacing: 0.0,
                                               fontWeight: FontWeight.w500,
                                               fontStyle: AppTheme.of(context)
                                                   .bodyMedium
                                                   .fontStyle,
                                             ),
-                                            color: Color(0xFF333333),
-                                            fontSize: 14,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                              ).animateOnPageLoad(
+                                animationsMap['containerOnPageLoadAnimation3']!,
                               ),
-                            ).animateOnPageLoad(
-                              animationsMap['containerOnPageLoadAnimation3']!,
                             ),
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 8,
-                                    color: Color(0x1A000000),
-                                    offset: Offset(0.0, 2),
-                                  ),
-                                ],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(16),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.calendar_today_rounded,
-                                      color: Color(0xFF8C1D40),
-                                      size: 32,
+
+                            // CALENDARIO
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          AcademicCalendarPage(),
+                                    ));
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 8,
+                                      color: Color(0x1A000000),
+                                      offset: Offset(0.0, 2),
                                     ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      'Calendario',
-                                      textAlign: TextAlign.center,
-                                      style: AppTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.nunitoSans(
+                                  ],
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_today_rounded,
+                                        color: Color(0xFF8C1D40),
+                                        size: 32,
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        'Calendario',
+                                        textAlign: TextAlign.center,
+                                        style: AppTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.nunitoSans(
+                                                fontWeight: FontWeight.w500,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                              ),
+                                              color: Color(0xFF333333),
+                                              fontSize: 14,
+                                              letterSpacing: 0.0,
                                               fontWeight: FontWeight.w500,
                                               fontStyle: AppTheme.of(context)
                                                   .bodyMedium
                                                   .fontStyle,
                                             ),
-                                            color: Color(0xFF333333),
-                                            fontSize: 14,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                              ).animateOnPageLoad(
+                                animationsMap['containerOnPageLoadAnimation4']!,
                               ),
-                            ).animateOnPageLoad(
-                              animationsMap['containerOnPageLoadAnimation4']!,
                             ),
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 8,
-                                    color: Color(0x1A000000),
-                                    offset: Offset(0.0, 2),
-                                  ),
-                                ],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(16),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.school_rounded,
-                                      color: Color(0xFF8C1D40),
-                                      size: 32,
+
+                            // OFERTA ACADEMICA
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          OfertaAcademicaPageWidget(),
+                                    ));
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 8,
+                                      color: Color(0x1A000000),
+                                      offset: Offset(0.0, 2),
                                     ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      'Oferta Académica',
-                                      textAlign: TextAlign.center,
-                                      style: AppTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.nunitoSans(
+                                  ],
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.school_rounded,
+                                        color: Color(0xFF8C1D40),
+                                        size: 32,
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        'Oferta Académica',
+                                        textAlign: TextAlign.center,
+                                        style: AppTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.nunitoSans(
+                                                fontWeight: FontWeight.w500,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                              ),
+                                              color: Color(0xFF333333),
+                                              fontSize: 14,
+                                              letterSpacing: 0.0,
                                               fontWeight: FontWeight.w500,
                                               fontStyle: AppTheme.of(context)
                                                   .bodyMedium
                                                   .fontStyle,
                                             ),
-                                            color: Color(0xFF333333),
-                                            fontSize: 14,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                              ).animateOnPageLoad(
+                                animationsMap['containerOnPageLoadAnimation5']!,
                               ),
-                            ).animateOnPageLoad(
-                              animationsMap['containerOnPageLoadAnimation5']!,
                             ),
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 8,
-                                    color: Color(0x1A000000),
-                                    offset: Offset(0.0, 2),
-                                  ),
-                                ],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(16),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.event_note_rounded,
-                                      color: Color(0xFF8C1D40),
-                                      size: 32,
+
+                            // AGENDA
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AgendaPageWidget(),
+                                    ));
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 8,
+                                      color: Color(0x1A000000),
+                                      offset: Offset(0.0, 2),
                                     ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      'Agenda',
-                                      textAlign: TextAlign.center,
-                                      style: AppTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.nunitoSans(
+                                  ],
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.event_note_rounded,
+                                        color: Color(0xFF8C1D40),
+                                        size: 32,
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        'Agenda',
+                                        textAlign: TextAlign.center,
+                                        style: AppTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.nunitoSans(
+                                                fontWeight: FontWeight.w500,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                              ),
+                                              color: Color(0xFF333333),
+                                              fontSize: 14,
+                                              letterSpacing: 0.0,
                                               fontWeight: FontWeight.w500,
                                               fontStyle: AppTheme.of(context)
                                                   .bodyMedium
                                                   .fontStyle,
                                             ),
-                                            color: Color(0xFF333333),
-                                            fontSize: 14,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                              ).animateOnPageLoad(
+                                animationsMap['containerOnPageLoadAnimation6']!,
                               ),
-                            ).animateOnPageLoad(
-                              animationsMap['containerOnPageLoadAnimation6']!,
                             ),
                           ],
                         ),

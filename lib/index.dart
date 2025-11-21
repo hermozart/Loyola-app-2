@@ -1,10 +1,10 @@
 export 'app_components/form_field_controller.dart';
 export 'grades_page.dart';
-export 'home_page.dart';
+// export 'home_page.dart';
 export 'login_page.dart';
 export 'news_page.dart';
 export 'grades_page_model.dart';
-export 'home_page_model.dart';
+// export 'home_page_model.dart';
 export 'login_page_model.dart';
 export 'news_page_model.dart';
 export 'agenda_page.dart';

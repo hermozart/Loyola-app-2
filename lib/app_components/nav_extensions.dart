@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 
-class HomePageWidget {
-  static const routeName = '/home';
-}
+// class HomePageWidget {
+//   static const routeName = '/home';
+// }
 
-class GradesPageWidget {
-  static const routeName = '/grades';
-}
+// class GradesPageWidget {
+//   static const routeName = '/grades';
+// }
 
-class NewsPageWidget {
-  static const routeName = '/news';
-}
+// class NewsPageWidget {
+//   static const routeName = '/news';
+// }
 
-class AgendaPageWidget {
-  static const routeName = '/agenda';
-}
-
-class SchedulePageWidget {
-  static const routeName = '/schedule';
-}
+// class SchedulePageWidget {
+//   static const routeName = '/schedule';
+// }
 
 class AcademicOfferPageWidget {
   static const routeName = '/academic-offer';
