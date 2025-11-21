@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "229671619957",
+    "project_id": "app-loyola-nicole",
+    "storage_bucket": "app-loyola-nicole.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229671619957:android:0378ac9dc47dc7a116573c",
+        "android_client_info": {
+          "package_name": "com.example.loyola_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4MRI3oK9z8ThW21Cj_j5OQLshzESdWTw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229671619957:android:f4beae2c93b7d1bf16573c",
+        "android_client_info": {
+          "package_name": "com.example.loyola_app2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4MRI3oK9z8ThW21Cj_j5OQLshzESdWTw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229671619957:android:675b72684b98f5c816573c",
+        "android_client_info": {
+          "package_name": "com.example.loyola_app22"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4MRI3oK9z8ThW21Cj_j5OQLshzESdWTw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

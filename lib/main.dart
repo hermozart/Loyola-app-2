@@ -8,8 +8,14 @@ import 'agenda_page.dart';
 import 'schedule_page.dart';
 import 'academic_offer_page.dart';
 import 'academic_calendar_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
