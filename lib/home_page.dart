@@ -13,18 +13,6 @@ import 'package:provider/provider.dart';
 import 'home_page_model.dart';
 export 'home_page_model.dart';
 
-/// Create a HomePage for LoyolaApp with a full-screen gradient background
-/// from #8C1D40 to #330A14.
-///
-/// Add SafeArea and scrolling. At top: Row with text “Hola, estudiante 👋”
-/// (white, 22 bold) and “¿Qué necesitas hoy?” (white 80%, 16) on the left,
-/// and a circular logo image on the right. Below, title “Accesos rápidos”
-/// (white 16 semibold) and 6 white cards (2 per row) with soft shadow, icon +
-/// label: Calificaciones, Horarios, Noticias, Calendario, Oferta Académica,
-/// Agenda. Then add section “Noticias y anuncios” with 3 white horizontal
-/// cards (title, date, summary). Then section “Próximos eventos” with 2
-/// vertical list items with event icon. Add fade + move up animations (600ms
-/// staggered).
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({super.key});
 
@@ -209,22 +197,20 @@ class _HomePageWidgetState extends State<HomePageWidget>
                             children: [
                               Text(
                                 'Hola, estudiante 👋',
-                                style: AppTheme.of(
-                                  context,
-                                ).titleLarge.override(
+                                style: AppTheme.of(context).titleLarge.override(
                                       font: GoogleFonts.montserrat(
                                         fontWeight: FontWeight.bold,
-                                        fontStyle: AppTheme.of(
-                                          context,
-                                        ).titleLarge.fontStyle,
+                                        fontStyle: AppTheme.of(context)
+                                            .titleLarge
+                                            .fontStyle,
                                       ),
                                       color: Colors.white,
                                       fontSize: 22,
                                       letterSpacing: 0.0,
                                       fontWeight: FontWeight.bold,
-                                      fontStyle: AppTheme.of(
-                                        context,
-                                      ).titleLarge.fontStyle,
+                                      fontStyle: AppTheme.of(context)
+                                          .titleLarge
+                                          .fontStyle,
                                     ),
                               ).animateOnPageLoad(
                                 animationsMap['textOnPageLoadAnimation1']!,
@@ -238,27 +224,26 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                 ),
                                 child: Text(
                                   '¿Qué necesitas hoy?',
-                                  style: AppTheme.of(
-                                    context,
-                                  ).bodyMedium.override(
-                                        font: GoogleFonts.nunitoSans(
-                                          fontWeight: AppTheme.of(
-                                            context,
-                                          ).bodyMedium.fontWeight,
-                                          fontStyle: AppTheme.of(
-                                            context,
-                                          ).bodyMedium.fontStyle,
-                                        ),
-                                        color: Color(0xCCFFFFFF),
-                                        fontSize: 16,
-                                        letterSpacing: 0.0,
-                                        fontWeight: AppTheme.of(
-                                          context,
-                                        ).bodyMedium.fontWeight,
-                                        fontStyle: AppTheme.of(
-                                          context,
-                                        ).bodyMedium.fontStyle,
-                                      ),
+                                  style:
+                                      AppTheme.of(context).bodyMedium.override(
+                                            font: GoogleFonts.nunitoSans(
+                                              fontWeight: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                            ),
+                                            color: Color(0xCCFFFFFF),
+                                            fontSize: 16,
+                                            letterSpacing: 0.0,
+                                            fontWeight: AppTheme.of(context)
+                                                .bodyMedium
+                                                .fontWeight,
+                                            fontStyle: AppTheme.of(context)
+                                                .bodyMedium
+                                                .fontStyle,
+                                          ),
                                 ).animateOnPageLoad(
                                   animationsMap['textOnPageLoadAnimation2']!,
                                 ),
@@ -284,22 +269,18 @@ class _HomePageWidgetState extends State<HomePageWidget>
                       children: [
                         Text(
                           'Accesos rápidos',
-                          style: AppTheme.of(
-                            context,
-                          ).bodyMedium.override(
+                          style: AppTheme.of(context).bodyMedium.override(
                                 font: GoogleFonts.nunitoSans(
                                   fontWeight: FontWeight.w600,
-                                  fontStyle: AppTheme.of(
-                                    context,
-                                  ).bodyMedium.fontStyle,
+                                  fontStyle:
+                                      AppTheme.of(context).bodyMedium.fontStyle,
                                 ),
                                 color: Colors.white,
                                 fontSize: 16,
                                 letterSpacing: 0.0,
                                 fontWeight: FontWeight.w600,
-                                fontStyle: AppTheme.of(
-                                  context,
-                                ).bodyMedium.fontStyle,
+                                fontStyle:
+                                    AppTheme.of(context).bodyMedium.fontStyle,
                               ),
                         ).animateOnPageLoad(
                           animationsMap['textOnPageLoadAnimation3']!,
@@ -342,28 +323,29 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                       color: Color(0xFF8C1D40),
                                       size: 32,
                                     ),
+                                    SizedBox(height: 8),
                                     Text(
                                       'Calificaciones',
                                       textAlign: TextAlign.center,
-                                      style: AppTheme.of(
-                                        context,
-                                      ).bodyMedium.override(
+                                      style: AppTheme.of(context)
+                                          .bodyMedium
+                                          .override(
                                             font: GoogleFonts.nunitoSans(
                                               fontWeight: FontWeight.w500,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodyMedium.fontStyle,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                             ),
                                             color: Color(0xFF333333),
                                             fontSize: 14,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(
-                                              context,
-                                            ).bodyMedium.fontStyle,
+                                            fontStyle: AppTheme.of(context)
+                                                .bodyMedium
+                                                .fontStyle,
                                           ),
                                     ),
-                                  ].divide(SizedBox(height: 8)),
+                                  ],
                                 ),
                               ),
                             ).animateOnPageLoad(
@@ -394,28 +376,29 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                       color: Color(0xFF8C1D40),
                                       size: 32,
                                     ),
+                                    SizedBox(height: 8),
                                     Text(
                                       'Horarios',
                                       textAlign: TextAlign.center,
-                                      style: AppTheme.of(
-                                        context,
-                                      ).bodyMedium.override(
+                                      style: AppTheme.of(context)
+                                          .bodyMedium
+                                          .override(
                                             font: GoogleFonts.nunitoSans(
                                               fontWeight: FontWeight.w500,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodyMedium.fontStyle,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                             ),
                                             color: Color(0xFF333333),
                                             fontSize: 14,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(
-                                              context,
-                                            ).bodyMedium.fontStyle,
+                                            fontStyle: AppTheme.of(context)
+                                                .bodyMedium
+                                                .fontStyle,
                                           ),
                                     ),
-                                  ].divide(SizedBox(height: 8)),
+                                  ],
                                 ),
                               ),
                             ).animateOnPageLoad(
@@ -446,28 +429,29 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                       color: Color(0xFF8C1D40),
                                       size: 32,
                                     ),
+                                    SizedBox(height: 8),
                                     Text(
                                       'Noticias',
                                       textAlign: TextAlign.center,
-                                      style: AppTheme.of(
-                                        context,
-                                      ).bodyMedium.override(
+                                      style: AppTheme.of(context)
+                                          .bodyMedium
+                                          .override(
                                             font: GoogleFonts.nunitoSans(
                                               fontWeight: FontWeight.w500,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodyMedium.fontStyle,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                             ),
                                             color: Color(0xFF333333),
                                             fontSize: 14,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(
-                                              context,
-                                            ).bodyMedium.fontStyle,
+                                            fontStyle: AppTheme.of(context)
+                                                .bodyMedium
+                                                .fontStyle,
                                           ),
                                     ),
-                                  ].divide(SizedBox(height: 8)),
+                                  ],
                                 ),
                               ),
                             ).animateOnPageLoad(
@@ -498,28 +482,29 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                       color: Color(0xFF8C1D40),
                                       size: 32,
                                     ),
+                                    SizedBox(height: 8),
                                     Text(
                                       'Calendario',
                                       textAlign: TextAlign.center,
-                                      style: AppTheme.of(
-                                        context,
-                                      ).bodyMedium.override(
+                                      style: AppTheme.of(context)
+                                          .bodyMedium
+                                          .override(
                                             font: GoogleFonts.nunitoSans(
                                               fontWeight: FontWeight.w500,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodyMedium.fontStyle,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                             ),
                                             color: Color(0xFF333333),
                                             fontSize: 14,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(
-                                              context,
-                                            ).bodyMedium.fontStyle,
+                                            fontStyle: AppTheme.of(context)
+                                                .bodyMedium
+                                                .fontStyle,
                                           ),
                                     ),
-                                  ].divide(SizedBox(height: 8)),
+                                  ],
                                 ),
                               ),
                             ).animateOnPageLoad(
@@ -550,28 +535,29 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                       color: Color(0xFF8C1D40),
                                       size: 32,
                                     ),
+                                    SizedBox(height: 8),
                                     Text(
                                       'Oferta Académica',
                                       textAlign: TextAlign.center,
-                                      style: AppTheme.of(
-                                        context,
-                                      ).bodyMedium.override(
+                                      style: AppTheme.of(context)
+                                          .bodyMedium
+                                          .override(
                                             font: GoogleFonts.nunitoSans(
                                               fontWeight: FontWeight.w500,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodyMedium.fontStyle,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                             ),
                                             color: Color(0xFF333333),
                                             fontSize: 14,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(
-                                              context,
-                                            ).bodyMedium.fontStyle,
+                                            fontStyle: AppTheme.of(context)
+                                                .bodyMedium
+                                                .fontStyle,
                                           ),
                                     ),
-                                  ].divide(SizedBox(height: 8)),
+                                  ],
                                 ),
                               ),
                             ).animateOnPageLoad(
@@ -602,28 +588,29 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                       color: Color(0xFF8C1D40),
                                       size: 32,
                                     ),
+                                    SizedBox(height: 8),
                                     Text(
                                       'Agenda',
                                       textAlign: TextAlign.center,
-                                      style: AppTheme.of(
-                                        context,
-                                      ).bodyMedium.override(
+                                      style: AppTheme.of(context)
+                                          .bodyMedium
+                                          .override(
                                             font: GoogleFonts.nunitoSans(
                                               fontWeight: FontWeight.w500,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodyMedium.fontStyle,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                             ),
                                             color: Color(0xFF333333),
                                             fontSize: 14,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(
-                                              context,
-                                            ).bodyMedium.fontStyle,
+                                            fontStyle: AppTheme.of(context)
+                                                .bodyMedium
+                                                .fontStyle,
                                           ),
                                     ),
-                                  ].divide(SizedBox(height: 8)),
+                                  ],
                                 ),
                               ),
                             ).animateOnPageLoad(
@@ -639,22 +626,18 @@ class _HomePageWidgetState extends State<HomePageWidget>
                       children: [
                         Text(
                           'Noticias y anuncios',
-                          style: AppTheme.of(
-                            context,
-                          ).bodyMedium.override(
+                          style: AppTheme.of(context).bodyMedium.override(
                                 font: GoogleFonts.nunitoSans(
                                   fontWeight: FontWeight.w600,
-                                  fontStyle: AppTheme.of(
-                                    context,
-                                  ).bodyMedium.fontStyle,
+                                  fontStyle:
+                                      AppTheme.of(context).bodyMedium.fontStyle,
                                 ),
                                 color: Colors.white,
                                 fontSize: 16,
                                 letterSpacing: 0.0,
                                 fontWeight: FontWeight.w600,
-                                fontStyle: AppTheme.of(
-                                  context,
-                                ).bodyMedium.fontStyle,
+                                fontStyle:
+                                    AppTheme.of(context).bodyMedium.fontStyle,
                               ),
                         ),
                         Column(
@@ -684,74 +667,76 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                     children: [
                                       Text(
                                         'Nuevas becas disponibles para estudiantes destacados',
-                                        style: AppTheme.of(
-                                          context,
-                                        ).bodyMedium.override(
+                                        style: AppTheme.of(context)
+                                            .bodyMedium
+                                            .override(
                                               font: GoogleFonts.nunitoSans(
                                                 fontWeight: FontWeight.w600,
-                                                fontStyle: AppTheme.of(
-                                                  context,
-                                                ).bodyMedium.fontStyle,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
                                               ),
                                               color: Color(0xFF333333),
                                               fontSize: 16,
                                               letterSpacing: 0.0,
                                               fontWeight: FontWeight.w600,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodyMedium.fontStyle,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                             ),
                                       ),
+                                      SizedBox(height: 8),
                                       Text(
                                         '15 de Enero, 2024',
-                                        style: AppTheme.of(
-                                          context,
-                                        ).bodySmall.override(
+                                        style: AppTheme.of(context)
+                                            .bodySmall
+                                            .override(
                                               font: GoogleFonts.nunitoSans(
-                                                fontWeight: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontWeight,
-                                                fontStyle: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontStyle,
+                                                fontWeight: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontWeight,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontStyle,
                                               ),
                                               color: Color(0xFF666666),
                                               fontSize: 12,
                                               letterSpacing: 0.0,
-                                              fontWeight: AppTheme.of(
-                                                context,
-                                              ).bodySmall.fontWeight,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodySmall.fontStyle,
+                                              fontWeight: AppTheme.of(context)
+                                                  .bodySmall
+                                                  .fontWeight,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodySmall
+                                                  .fontStyle,
                                             ),
                                       ),
+                                      SizedBox(height: 8),
                                       Text(
                                         'La universidad anuncia la apertura de convocatoria para becas de excelencia académica dirigidas a estudiantes de pregrado.',
                                         maxLines: 2,
-                                        style: AppTheme.of(
-                                          context,
-                                        ).bodySmall.override(
+                                        style: AppTheme.of(context)
+                                            .bodySmall
+                                            .override(
                                               font: GoogleFonts.nunitoSans(
-                                                fontWeight: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontWeight,
-                                                fontStyle: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontStyle,
+                                                fontWeight: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontWeight,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontStyle,
                                               ),
                                               color: Color(0xFF555555),
                                               fontSize: 14,
                                               letterSpacing: 0.0,
-                                              fontWeight: AppTheme.of(
-                                                context,
-                                              ).bodySmall.fontWeight,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodySmall.fontStyle,
+                                              fontWeight: AppTheme.of(context)
+                                                  .bodySmall
+                                                  .fontWeight,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodySmall
+                                                  .fontStyle,
                                             ),
                                       ),
-                                    ].divide(SizedBox(height: 8)),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -780,74 +765,76 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                     children: [
                                       Text(
                                         'Actualización del sistema de biblioteca digital',
-                                        style: AppTheme.of(
-                                          context,
-                                        ).bodyMedium.override(
+                                        style: AppTheme.of(context)
+                                            .bodyMedium
+                                            .override(
                                               font: GoogleFonts.nunitoSans(
                                                 fontWeight: FontWeight.w600,
-                                                fontStyle: AppTheme.of(
-                                                  context,
-                                                ).bodyMedium.fontStyle,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
                                               ),
                                               color: Color(0xFF333333),
                                               fontSize: 16,
                                               letterSpacing: 0.0,
                                               fontWeight: FontWeight.w600,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodyMedium.fontStyle,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                             ),
                                       ),
+                                      SizedBox(height: 8),
                                       Text(
                                         '12 de Enero, 2024',
-                                        style: AppTheme.of(
-                                          context,
-                                        ).bodySmall.override(
+                                        style: AppTheme.of(context)
+                                            .bodySmall
+                                            .override(
                                               font: GoogleFonts.nunitoSans(
-                                                fontWeight: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontWeight,
-                                                fontStyle: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontStyle,
+                                                fontWeight: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontWeight,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontStyle,
                                               ),
                                               color: Color(0xFF666666),
                                               fontSize: 12,
                                               letterSpacing: 0.0,
-                                              fontWeight: AppTheme.of(
-                                                context,
-                                              ).bodySmall.fontWeight,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodySmall.fontStyle,
+                                              fontWeight: AppTheme.of(context)
+                                                  .bodySmall
+                                                  .fontWeight,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodySmall
+                                                  .fontStyle,
                                             ),
                                       ),
+                                      SizedBox(height: 8),
                                       Text(
                                         'Nuevas funcionalidades y mejoras en la plataforma de consulta de recursos bibliográficos en línea.',
                                         maxLines: 2,
-                                        style: AppTheme.of(
-                                          context,
-                                        ).bodySmall.override(
+                                        style: AppTheme.of(context)
+                                            .bodySmall
+                                            .override(
                                               font: GoogleFonts.nunitoSans(
-                                                fontWeight: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontWeight,
-                                                fontStyle: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontStyle,
+                                                fontWeight: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontWeight,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontStyle,
                                               ),
                                               color: Color(0xFF555555),
                                               fontSize: 14,
                                               letterSpacing: 0.0,
-                                              fontWeight: AppTheme.of(
-                                                context,
-                                              ).bodySmall.fontWeight,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodySmall.fontStyle,
+                                              fontWeight: AppTheme.of(context)
+                                                  .bodySmall
+                                                  .fontWeight,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodySmall
+                                                  .fontStyle,
                                             ),
                                       ),
-                                    ].divide(SizedBox(height: 8)),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -876,79 +863,81 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                     children: [
                                       Text(
                                         'Semana de la innovación tecnológica',
-                                        style: AppTheme.of(
-                                          context,
-                                        ).bodyMedium.override(
+                                        style: AppTheme.of(context)
+                                            .bodyMedium
+                                            .override(
                                               font: GoogleFonts.nunitoSans(
                                                 fontWeight: FontWeight.w600,
-                                                fontStyle: AppTheme.of(
-                                                  context,
-                                                ).bodyMedium.fontStyle,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
                                               ),
                                               color: Color(0xFF333333),
                                               fontSize: 16,
                                               letterSpacing: 0.0,
                                               fontWeight: FontWeight.w600,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodyMedium.fontStyle,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                             ),
                                       ),
+                                      SizedBox(height: 8),
                                       Text(
                                         '10 de Enero, 2024',
-                                        style: AppTheme.of(
-                                          context,
-                                        ).bodySmall.override(
+                                        style: AppTheme.of(context)
+                                            .bodySmall
+                                            .override(
                                               font: GoogleFonts.nunitoSans(
-                                                fontWeight: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontWeight,
-                                                fontStyle: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontStyle,
+                                                fontWeight: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontWeight,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontStyle,
                                               ),
                                               color: Color(0xFF666666),
                                               fontSize: 12,
                                               letterSpacing: 0.0,
-                                              fontWeight: AppTheme.of(
-                                                context,
-                                              ).bodySmall.fontWeight,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodySmall.fontStyle,
+                                              fontWeight: AppTheme.of(context)
+                                                  .bodySmall
+                                                  .fontWeight,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodySmall
+                                                  .fontStyle,
                                             ),
                                       ),
+                                      SizedBox(height: 8),
                                       Text(
                                         'Conferencias, talleres y exposiciones sobre las últimas tendencias en tecnología e innovación.',
                                         maxLines: 2,
-                                        style: AppTheme.of(
-                                          context,
-                                        ).bodySmall.override(
+                                        style: AppTheme.of(context)
+                                            .bodySmall
+                                            .override(
                                               font: GoogleFonts.nunitoSans(
-                                                fontWeight: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontWeight,
-                                                fontStyle: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontStyle,
+                                                fontWeight: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontWeight,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontStyle,
                                               ),
                                               color: Color(0xFF555555),
                                               fontSize: 14,
                                               letterSpacing: 0.0,
-                                              fontWeight: AppTheme.of(
-                                                context,
-                                              ).bodySmall.fontWeight,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodySmall.fontStyle,
+                                              fontWeight: AppTheme.of(context)
+                                                  .bodySmall
+                                                  .fontWeight,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodySmall
+                                                  .fontStyle,
                                             ),
                                       ),
-                                    ].divide(SizedBox(height: 8)),
+                                    ],
                                   ),
                                 ),
                               ),
                             ),
-                          ].divide(SizedBox(height: 12)),
+                          ],
                         ),
                       ].divide(SizedBox(height: 16)),
                     ),
@@ -958,22 +947,18 @@ class _HomePageWidgetState extends State<HomePageWidget>
                       children: [
                         Text(
                           'Próximos eventos',
-                          style: AppTheme.of(
-                            context,
-                          ).bodyMedium.override(
+                          style: AppTheme.of(context).bodyMedium.override(
                                 font: GoogleFonts.nunitoSans(
                                   fontWeight: FontWeight.w600,
-                                  fontStyle: AppTheme.of(
-                                    context,
-                                  ).bodyMedium.fontStyle,
+                                  fontStyle:
+                                      AppTheme.of(context).bodyMedium.fontStyle,
                                 ),
                                 color: Colors.white,
                                 fontSize: 16,
                                 letterSpacing: 0.0,
                                 fontWeight: FontWeight.w600,
-                                fontStyle: AppTheme.of(
-                                  context,
-                                ).bodyMedium.fontStyle,
+                                fontStyle:
+                                    AppTheme.of(context).bodyMedium.fontStyle,
                               ),
                         ),
                         Column(
@@ -998,6 +983,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                     ),
                                   ),
                                 ),
+                                SizedBox(width: 16),
                                 Expanded(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
@@ -1006,22 +992,22 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                     children: [
                                       Text(
                                         'Feria de empleo y prácticas profesionales',
-                                        style: AppTheme.of(
-                                          context,
-                                        ).bodyMedium.override(
+                                        style: AppTheme.of(context)
+                                            .bodyMedium
+                                            .override(
                                               font: GoogleFonts.nunitoSans(
                                                 fontWeight: FontWeight.w600,
-                                                fontStyle: AppTheme.of(
-                                                  context,
-                                                ).bodyMedium.fontStyle,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
                                               ),
                                               color: Colors.white,
                                               fontSize: 15,
                                               letterSpacing: 0.0,
                                               fontWeight: FontWeight.w600,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodyMedium.fontStyle,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                             ),
                                       ),
                                       Padding(
@@ -1033,34 +1019,37 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                         ),
                                         child: Text(
                                           '25 de Enero, 2024 - 9:00 AM',
-                                          style: AppTheme.of(
-                                            context,
-                                          ).bodySmall.override(
+                                          style: AppTheme.of(context)
+                                              .bodySmall
+                                              .override(
                                                 font: GoogleFonts.nunitoSans(
-                                                  fontWeight: AppTheme.of(
-                                                    context,
-                                                  ).bodySmall.fontWeight,
-                                                  fontStyle: AppTheme.of(
-                                                    context,
-                                                  ).bodySmall.fontStyle,
+                                                  fontWeight:
+                                                      AppTheme.of(context)
+                                                          .bodySmall
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      AppTheme.of(context)
+                                                          .bodySmall
+                                                          .fontStyle,
                                                 ),
                                                 color: Color(0xCCFFFFFF),
                                                 fontSize: 13,
                                                 letterSpacing: 0.0,
-                                                fontWeight: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontWeight,
-                                                fontStyle: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontStyle,
+                                                fontWeight: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontWeight,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontStyle,
                                               ),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ].divide(SizedBox(width: 16)),
+                              ],
                             ),
+                            SizedBox(height: 12),
                             Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
@@ -1080,6 +1069,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                     ),
                                   ),
                                 ),
+                                SizedBox(width: 16),
                                 Expanded(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
@@ -1088,22 +1078,22 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                     children: [
                                       Text(
                                         'Torneo interuniversitario de fútbol',
-                                        style: AppTheme.of(
-                                          context,
-                                        ).bodyMedium.override(
+                                        style: AppTheme.of(context)
+                                            .bodyMedium
+                                            .override(
                                               font: GoogleFonts.nunitoSans(
                                                 fontWeight: FontWeight.w600,
-                                                fontStyle: AppTheme.of(
-                                                  context,
-                                                ).bodyMedium.fontStyle,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
                                               ),
                                               color: Colors.white,
                                               fontSize: 15,
                                               letterSpacing: 0.0,
                                               fontWeight: FontWeight.w600,
-                                              fontStyle: AppTheme.of(
-                                                context,
-                                              ).bodyMedium.fontStyle,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                             ),
                                       ),
                                       Padding(
@@ -1115,35 +1105,37 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                         ),
                                         child: Text(
                                           '30 de Enero, 2024 - 3:00 PM',
-                                          style: AppTheme.of(
-                                            context,
-                                          ).bodySmall.override(
+                                          style: AppTheme.of(context)
+                                              .bodySmall
+                                              .override(
                                                 font: GoogleFonts.nunitoSans(
-                                                  fontWeight: AppTheme.of(
-                                                    context,
-                                                  ).bodySmall.fontWeight,
-                                                  fontStyle: AppTheme.of(
-                                                    context,
-                                                  ).bodySmall.fontStyle,
+                                                  fontWeight:
+                                                      AppTheme.of(context)
+                                                          .bodySmall
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      AppTheme.of(context)
+                                                          .bodySmall
+                                                          .fontStyle,
                                                 ),
                                                 color: Color(0xCCFFFFFF),
                                                 fontSize: 13,
                                                 letterSpacing: 0.0,
-                                                fontWeight: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontWeight,
-                                                fontStyle: AppTheme.of(
-                                                  context,
-                                                ).bodySmall.fontStyle,
+                                                fontWeight: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontWeight,
+                                                fontStyle: AppTheme.of(context)
+                                                    .bodySmall
+                                                    .fontStyle,
                                               ),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ].divide(SizedBox(width: 16)),
+                              ],
                             ),
-                          ].divide(SizedBox(height: 12)),
+                          ],
                         ),
                       ].divide(SizedBox(height: 16)),
                     ),

@@ -10,22 +10,6 @@ import 'package:provider/provider.dart';
 import 'agenda_page_model.dart';
 export 'agenda_page_model.dart';
 
-/// Create a page for LoyolaApp to display a clean and interactive agenda for
-/// students.
-///
-/// The design should be modern and match the app’s branding using red and
-/// white as the primary colors (#8C1D40 for red). The agenda should allow
-/// users to view upcoming academic events, meetings, and deadlines. It should
-/// include interactive features, allowing users to click on any date to see
-/// the events scheduled for that day. The page should display a list of
-/// events sorted by date and provide the option to filter them by type (e.g.,
-/// classes, exams, meetings). The design should prioritize clarity and
-/// usability, with large, easy-to-read fonts and well-spaced event details.
-/// Users should be able to add their own events to the agenda as well. Key
-/// dates, such as exam weeks or holidays, should be highlighted in red to
-/// make them stand out. The agenda should update in real-time as new events
-/// are added, and the data should be stored locally or on a cloud database
-/// for synchronization across devices
 class AgendaPageWidget extends StatefulWidget {
   const AgendaPageWidget({super.key});
 
@@ -50,7 +34,6 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
 
@@ -193,6 +176,7 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                                       print('IconButton pressed ...');
                                     },
                                   ),
+                                  SizedBox(width: 8),
                                   AppIconButton(
                                     borderRadius: 16,
                                     buttonSize: 32,
@@ -206,7 +190,7 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                                       print('IconButton pressed ...');
                                     },
                                   ),
-                                ].divide(SizedBox(width: 8)),
+                                ],
                               ),
                             ],
                           ),
@@ -223,12 +207,16 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                           primary: false,
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
-                          children: [
-                            Container(
+                          children: List.generate(14, (index) {
+                            final day = index + 1;
+                            final isHighlighted = day == 3 || day == 13;
+                            return Container(
                               width: 40,
                               height: 40,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: isHighlighted
+                                    ? Color(0xFF8C1D40)
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Align(
@@ -236,18 +224,22 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                                 child: Padding(
                                   padding: EdgeInsets.all(8),
                                   child: Text(
-                                    '1',
+                                    '$day',
                                     style: AppTheme.of(context)
                                         .bodyMedium
                                         .override(
                                           font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
+                                            fontWeight: isHighlighted
+                                                ? FontWeight.w600
+                                                : FontWeight.w500,
                                             fontStyle: AppTheme.of(context)
                                                 .bodyMedium
                                                 .fontStyle,
                                           ),
+                                          color: isHighlighted
+                                              ? Colors.white
+                                              : Colors.black,
                                           letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
                                           fontStyle: AppTheme.of(context)
                                               .bodyMedium
                                               .fontStyle,
@@ -255,426 +247,8 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                                   ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    '2',
-                                    style: AppTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle: AppTheme.of(context)
-                                              .bodyMedium
-                                              .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF8C1D40),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    '3',
-                                    style: AppTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w600,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                          color: Colors.white,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w600,
-                                          fontStyle: AppTheme.of(context)
-                                              .bodyMedium
-                                              .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    '4',
-                                    style: AppTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle: AppTheme.of(context)
-                                              .bodyMedium
-                                              .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    '5',
-                                    style: AppTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle: AppTheme.of(context)
-                                              .bodyMedium
-                                              .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    '6',
-                                    style: AppTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle: AppTheme.of(context)
-                                              .bodyMedium
-                                              .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    '7',
-                                    style: AppTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle: AppTheme.of(context)
-                                              .bodyMedium
-                                              .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    '8',
-                                    style: AppTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle: AppTheme.of(context)
-                                              .bodyMedium
-                                              .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    '9',
-                                    style: AppTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle: AppTheme.of(context)
-                                              .bodyMedium
-                                              .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    '10',
-                                    style: AppTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle: AppTheme.of(context)
-                                              .bodyMedium
-                                              .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    '11',
-                                    style: AppTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle: AppTheme.of(context)
-                                              .bodyMedium
-                                              .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    '12',
-                                    style: AppTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle: AppTheme.of(context)
-                                              .bodyMedium
-                                              .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF8C1D40),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    '13',
-                                    style: AppTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w600,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                          color: Colors.white,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w600,
-                                          fontStyle: AppTheme.of(context)
-                                              .bodyMedium
-                                              .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    '14',
-                                    style: AppTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle: AppTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle: AppTheme.of(context)
-                                              .bodyMedium
-                                              .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                            );
+                          }),
                         ),
                       ],
                     ),
@@ -683,982 +257,357 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: Color(0xFF8C1D40),
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Text(
-                              'All',
-                              style: AppTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w600,
-                                      fontStyle: AppTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: Colors.white,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w600,
-                                    fontStyle: AppTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                            ),
-                          ].divide(SizedBox(width: 8)),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF0F0F0),
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Icon(
-                              Icons.school_rounded,
-                              color: Color(0xFF8C1D40),
-                              size: 16,
-                            ),
-                            Text(
-                              'Classes',
-                              style: AppTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: AppTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: Color(0xFF8C1D40),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontStyle: AppTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                            ),
-                          ].divide(SizedBox(width: 8)),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF0F0F0),
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Icon(
-                              Icons.quiz_rounded,
-                              color: Color(0xFF8C1D40),
-                              size: 16,
-                            ),
-                            Text(
-                              'Exams',
-                              style: AppTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: AppTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: Color(0xFF8C1D40),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontStyle: AppTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                            ),
-                          ].divide(SizedBox(width: 8)),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF0F0F0),
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Icon(
-                              Icons.groups_rounded,
-                              color: Color(0xFF8C1D40),
-                              size: 16,
-                            ),
-                            Text(
-                              'Meetings',
-                              style: AppTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: AppTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: Color(0xFF8C1D40),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontStyle: AppTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                            ),
-                          ].divide(SizedBox(width: 8)),
-                        ),
-                      ),
-                    ),
-                  ].divide(SizedBox(width: 8)),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      _buildFilterChip(context, 'All', true),
+                      SizedBox(width: 8),
+                      _buildFilterChip(
+                          context, 'Classes', false, Icons.school_rounded),
+                      SizedBox(width: 8),
+                      _buildFilterChip(
+                          context, 'Exams', false, Icons.quiz_rounded),
+                      SizedBox(width: 8),
+                      _buildFilterChip(
+                          context, 'Meetings', false, Icons.groups_rounded),
+                    ],
+                  ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Color(0xFFE0E0E0),
-                            width: 1,
-                          ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF8C1D40),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(16),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Align(
-                                        alignment: AlignmentDirectional(0, 0),
-                                        child: Text(
-                                          'DEC',
-                                          style: AppTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontStyle:
-                                                      AppTheme.of(context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w600,
-                                                fontStyle: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: AlignmentDirectional(0, 0),
-                                        child: Text(
-                                          '13',
-                                          style: AppTheme.of(context)
-                                              .titleMedium
-                                              .override(
-                                                font: GoogleFonts.interTight(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontStyle:
-                                                      AppTheme.of(context)
-                                                          .titleMedium
-                                                          .fontStyle,
-                                                ),
-                                                color: Colors.white,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.bold,
-                                                fontStyle: AppTheme.of(context)
-                                                    .titleMedium
-                                                    .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Final Exam - Business Ethics',
-                                          style: AppTheme.of(context)
-                                              .titleMedium
-                                              .override(
-                                                font: GoogleFonts.interTight(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontStyle:
-                                                      AppTheme.of(context)
-                                                          .titleMedium
-                                                          .fontStyle,
-                                                ),
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w600,
-                                                fontStyle: AppTheme.of(context)
-                                                    .titleMedium
-                                                    .fontStyle,
-                                              ),
-                                        ),
-                                        Container(
-                                          height: 24,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFFFE6E6),
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    8, 4, 8, 4),
-                                            child: Text(
-                                              'EXAM',
-                                              style: AppTheme.of(context)
-                                                  .bodySmall
-                                                  .override(
-                                                    font: GoogleFonts.inter(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontStyle:
-                                                          AppTheme.of(context)
-                                                              .bodySmall
-                                                              .fontStyle,
-                                                    ),
-                                                    color: Color(0xFF8C1D40),
-                                                    fontSize: 10,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontStyle:
-                                                        AppTheme.of(context)
-                                                            .bodySmall
-                                                            .fontStyle,
-                                                  ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 4, 0, 0),
-                                      child: Text(
-                                        'Room: Johnson Hall 205',
-                                        style: AppTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              font: GoogleFonts.inter(
-                                                fontWeight: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                                fontStyle: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                              ),
-                                              color: Color(0xFF666666),
-                                              letterSpacing: 0.0,
-                                              fontWeight: AppTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontWeight,
-                                              fontStyle: AppTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontStyle,
-                                            ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 8, 0, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Icon(
-                                                Icons.access_time_rounded,
-                                                color: Color(0xFF8C1D40),
-                                                size: 16,
-                                              ),
-                                              Text(
-                                                '2:00 PM - 4:00 PM',
-                                                style: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            AppTheme.of(context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            AppTheme.of(context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color: Color(0xFF666666),
-                                                      fontSize: 14,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          AppTheme.of(context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          AppTheme.of(context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                              ),
-                                            ].divide(SizedBox(width: 4)),
-                                          ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Icon(
-                                                Icons.location_on_rounded,
-                                                color: Color(0xFF8C1D40),
-                                                size: 16,
-                                              ),
-                                              Text(
-                                                'Campus Center',
-                                                style: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            AppTheme.of(context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            AppTheme.of(context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color: Color(0xFF666666),
-                                                      fontSize: 14,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          AppTheme.of(context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          AppTheme.of(context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                              ),
-                                            ].divide(SizedBox(width: 4)),
-                                          ),
-                                        ].divide(SizedBox(width: 16)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ].divide(SizedBox(width: 12)),
-                          ),
-                        ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    children: [
+                      _buildEventCard(
+                        context,
+                        'DEC',
+                        '13',
+                        'Final Exam - Business Ethics',
+                        'Room: Johnson Hall 205',
+                        '2:00 PM - 4:00 PM',
+                        'Campus Center',
+                        'EXAM',
+                        Color(0xFFFFE6E6),
+                        Color(0xFF8C1D40),
+                        true,
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Color(0xFFE0E0E0),
-                            width: 1,
-                          ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFF0F0F0),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(16),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Align(
-                                        alignment: AlignmentDirectional(0, 0),
-                                        child: Text(
-                                          'DEC',
-                                          style: AppTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontStyle:
-                                                      AppTheme.of(context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color: Color(0xFF666666),
-                                                fontSize: 12,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w600,
-                                                fontStyle: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: AlignmentDirectional(0, 0),
-                                        child: Text(
-                                          '14',
-                                          style: AppTheme.of(context)
-                                              .titleMedium
-                                              .override(
-                                                font: GoogleFonts.interTight(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontStyle:
-                                                      AppTheme.of(context)
-                                                          .titleMedium
-                                                          .fontStyle,
-                                                ),
-                                                color: Color(0xFF333333),
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.bold,
-                                                fontStyle: AppTheme.of(context)
-                                                    .titleMedium
-                                                    .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Marketing Strategy Presentation',
-                                          style: AppTheme.of(context)
-                                              .titleMedium
-                                              .override(
-                                                font: GoogleFonts.interTight(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontStyle:
-                                                      AppTheme.of(context)
-                                                          .titleMedium
-                                                          .fontStyle,
-                                                ),
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w600,
-                                                fontStyle: AppTheme.of(context)
-                                                    .titleMedium
-                                                    .fontStyle,
-                                              ),
-                                        ),
-                                        Container(
-                                          height: 24,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFE6F3FF),
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    8, 4, 8, 4),
-                                            child: Text(
-                                              'CLASS',
-                                              style: AppTheme.of(context)
-                                                  .bodySmall
-                                                  .override(
-                                                    font: GoogleFonts.inter(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontStyle:
-                                                          AppTheme.of(context)
-                                                              .bodySmall
-                                                              .fontStyle,
-                                                    ),
-                                                    color: Color(0xFF0066CC),
-                                                    fontSize: 10,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontStyle:
-                                                        AppTheme.of(context)
-                                                            .bodySmall
-                                                            .fontStyle,
-                                                  ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 4, 0, 0),
-                                      child: Text(
-                                        'Professor Martinez - Group Project',
-                                        style: AppTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              font: GoogleFonts.inter(
-                                                fontWeight: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                                fontStyle: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                              ),
-                                              color: Color(0xFF666666),
-                                              letterSpacing: 0.0,
-                                              fontWeight: AppTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontWeight,
-                                              fontStyle: AppTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontStyle,
-                                            ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 8, 0, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Icon(
-                                                Icons.access_time_rounded,
-                                                color: Color(0xFF8C1D40),
-                                                size: 16,
-                                              ),
-                                              Text(
-                                                '10:30 AM - 12:00 PM',
-                                                style: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            AppTheme.of(context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            AppTheme.of(context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color: Color(0xFF666666),
-                                                      fontSize: 14,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          AppTheme.of(context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          AppTheme.of(context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                              ),
-                                            ].divide(SizedBox(width: 4)),
-                                          ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Icon(
-                                                Icons.location_on_rounded,
-                                                color: Color(0xFF8C1D40),
-                                                size: 16,
-                                              ),
-                                              Text(
-                                                'Business Building',
-                                                style: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            AppTheme.of(context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            AppTheme.of(context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color: Color(0xFF666666),
-                                                      fontSize: 14,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          AppTheme.of(context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          AppTheme.of(context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                              ),
-                                            ].divide(SizedBox(width: 4)),
-                                          ),
-                                        ].divide(SizedBox(width: 16)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ].divide(SizedBox(width: 12)),
-                          ),
-                        ),
+                      SizedBox(height: 12),
+                      _buildEventCard(
+                        context,
+                        'DEC',
+                        '14',
+                        'Marketing Strategy Presentation',
+                        'Professor Martinez - Group Project',
+                        '10:30 AM - 12:00 PM',
+                        'Business Building',
+                        'CLASS',
+                        Color(0xFFE6F3FF),
+                        Color(0xFF0066CC),
+                        false,
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Color(0xFFE0E0E0),
-                            width: 1,
-                          ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFF0F0F0),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(16),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Align(
-                                        alignment: AlignmentDirectional(0, 0),
-                                        child: Text(
-                                          'DEC',
-                                          style: AppTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontStyle:
-                                                      AppTheme.of(context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color: Color(0xFF666666),
-                                                fontSize: 12,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w600,
-                                                fontStyle: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: AlignmentDirectional(0, 0),
-                                        child: Text(
-                                          '15',
-                                          style: AppTheme.of(context)
-                                              .titleMedium
-                                              .override(
-                                                font: GoogleFonts.interTight(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontStyle:
-                                                      AppTheme.of(context)
-                                                          .titleMedium
-                                                          .fontStyle,
-                                                ),
-                                                color: Color(0xFF333333),
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.bold,
-                                                fontStyle: AppTheme.of(context)
-                                                    .titleMedium
-                                                    .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Student Council Meeting',
-                                          style: AppTheme.of(context)
-                                              .titleMedium
-                                              .override(
-                                                font: GoogleFonts.interTight(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontStyle:
-                                                      AppTheme.of(context)
-                                                          .titleMedium
-                                                          .fontStyle,
-                                                ),
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w600,
-                                                fontStyle: AppTheme.of(context)
-                                                    .titleMedium
-                                                    .fontStyle,
-                                              ),
-                                        ),
-                                        Container(
-                                          height: 24,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFE6FFE6),
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    8, 4, 8, 4),
-                                            child: Text(
-                                              'MEETING',
-                                              style: AppTheme.of(context)
-                                                  .bodySmall
-                                                  .override(
-                                                    font: GoogleFonts.inter(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontStyle:
-                                                          AppTheme.of(context)
-                                                              .bodySmall
-                                                              .fontStyle,
-                                                    ),
-                                                    color: Color(0xFF00AA00),
-                                                    fontSize: 10,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontStyle:
-                                                        AppTheme.of(context)
-                                                            .bodySmall
-                                                            .fontStyle,
-                                                  ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 4, 0, 0),
-                                      child: Text(
-                                        'Monthly planning session',
-                                        style: AppTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              font: GoogleFonts.inter(
-                                                fontWeight: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                                fontStyle: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                              ),
-                                              color: Color(0xFF666666),
-                                              letterSpacing: 0.0,
-                                              fontWeight: AppTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontWeight,
-                                              fontStyle: AppTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontStyle,
-                                            ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 8, 0, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Icon(
-                                                Icons.access_time_rounded,
-                                                color: Color(0xFF8C1D40),
-                                                size: 16,
-                                              ),
-                                              Text(
-                                                '4:00 PM - 5:30 PM',
-                                                style: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            AppTheme.of(context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            AppTheme.of(context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color: Color(0xFF666666),
-                                                      fontSize: 14,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          AppTheme.of(context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          AppTheme.of(context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                              ),
-                                            ].divide(SizedBox(width: 4)),
-                                          ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Icon(
-                                                Icons.location_on_rounded,
-                                                color: Color(0xFF8C1D40),
-                                                size: 16,
-                                              ),
-                                              Text(
-                                                'Student Union',
-                                                style: AppTheme.of(context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            AppTheme.of(context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            AppTheme.of(context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color: Color(0xFF666666),
-                                                      fontSize: 14,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          AppTheme.of(context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          AppTheme.of(context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                              ),
-                                            ].divide(SizedBox(width: 4)),
-                                          ),
-                                        ].divide(SizedBox(width: 16)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ].divide(SizedBox(width: 12)),
-                          ),
-                        ),
+                      SizedBox(height: 12),
+                      _buildEventCard(
+                        context,
+                        'DEC',
+                        '15',
+                        'Student Council Meeting',
+                        'Monthly planning session',
+                        '4:00 PM - 5:30 PM',
+                        'Student Union',
+                        'MEETING',
+                        Color(0xFFE6FFE6),
+                        Color(0xFF00AA00),
+                        false,
                       ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Color(0xFFE0E0E0),
-                          width: 1,
-                        ),
-                      ),
-                    ),
-                  ].divide(SizedBox(height: 12)),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterChip(
+    BuildContext context,
+    String label,
+    bool isActive, [
+    IconData? icon,
+  ]) {
+    return Container(
+      height: 36,
+      decoration: BoxDecoration(
+        color: isActive ? Color(0xFF8C1D40) : Color(0xFFF0F0F0),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            if (icon != null) ...[
+              Icon(
+                icon,
+                color: isActive ? Colors.white : Color(0xFF8C1D40),
+                size: 16,
+              ),
+              SizedBox(width: 8),
+            ],
+            Text(
+              label,
+              style: AppTheme.of(context).bodyMedium.override(
+                    font: GoogleFonts.inter(
+                      fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                      fontStyle: AppTheme.of(context).bodyMedium.fontStyle,
+                    ),
+                    color: isActive ? Colors.white : Color(0xFF8C1D40),
+                    letterSpacing: 0.0,
+                    fontStyle: AppTheme.of(context).bodyMedium.fontStyle,
+                  ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEventCard(
+    BuildContext context,
+    String month,
+    String day,
+    String title,
+    String subtitle,
+    String time,
+    String location,
+    String badgeText,
+    Color badgeColor,
+    Color badgeTextColor,
+    bool isHighlighted,
+  ) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Color(0xFFE0E0E0),
+          width: 1,
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(12),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: isHighlighted ? Color(0xFF8C1D40) : Color(0xFFF0F0F0),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: AlignmentDirectional(0, 0),
+                      child: Text(
+                        month,
+                        style: AppTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FontWeight.w600,
+                                fontStyle:
+                                    AppTheme.of(context).bodyMedium.fontStyle,
+                              ),
+                              color: isHighlighted
+                                  ? Colors.white
+                                  : Color(0xFF666666),
+                              fontSize: 12,
+                              letterSpacing: 0.0,
+                              fontStyle:
+                                  AppTheme.of(context).bodyMedium.fontStyle,
+                            ),
+                      ),
+                    ),
+                    Align(
+                      alignment: AlignmentDirectional(0, 0),
+                      child: Text(
+                        day,
+                        style: AppTheme.of(context).titleMedium.override(
+                              font: GoogleFonts.interTight(
+                                fontWeight: FontWeight.bold,
+                                fontStyle:
+                                    AppTheme.of(context).titleMedium.fontStyle,
+                              ),
+                              color: isHighlighted
+                                  ? Colors.white
+                                  : Color(0xFF333333),
+                              letterSpacing: 0.0,
+                              fontStyle:
+                                  AppTheme.of(context).titleMedium.fontStyle,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: AppTheme.of(context).titleMedium.override(
+                                font: GoogleFonts.interTight(
+                                  fontWeight: FontWeight.w600,
+                                  fontStyle: AppTheme.of(context)
+                                      .titleMedium
+                                      .fontStyle,
+                                ),
+                                letterSpacing: 0.0,
+                                fontStyle:
+                                    AppTheme.of(context).titleMedium.fontStyle,
+                              ),
+                        ),
+                      ),
+                      Container(
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: badgeColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(8, 4, 8, 4),
+                          child: Text(
+                            badgeText,
+                            style: AppTheme.of(context).bodySmall.override(
+                                  font: GoogleFonts.inter(
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: AppTheme.of(context)
+                                        .bodySmall
+                                        .fontStyle,
+                                  ),
+                                  color: badgeTextColor,
+                                  fontSize: 10,
+                                  letterSpacing: 0.0,
+                                  fontStyle:
+                                      AppTheme.of(context).bodySmall.fontStyle,
+                                ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                    child: Text(
+                      subtitle,
+                      style: AppTheme.of(context).bodyMedium.override(
+                            font: GoogleFonts.inter(
+                              fontWeight:
+                                  AppTheme.of(context).bodyMedium.fontWeight,
+                              fontStyle:
+                                  AppTheme.of(context).bodyMedium.fontStyle,
+                            ),
+                            color: Color(0xFF666666),
+                            letterSpacing: 0.0,
+                            fontStyle:
+                                AppTheme.of(context).bodyMedium.fontStyle,
+                          ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Icon(
+                              Icons.access_time_rounded,
+                              color: Color(0xFF8C1D40),
+                              size: 16,
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              time,
+                              style: AppTheme.of(context).bodyMedium.override(
+                                    font: GoogleFonts.inter(
+                                      fontWeight: AppTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: AppTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: Color(0xFF666666),
+                                    fontSize: 14,
+                                    letterSpacing: 0.0,
+                                    fontStyle: AppTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 16),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Icon(
+                              Icons.location_on_rounded,
+                              color: Color(0xFF8C1D40),
+                              size: 16,
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              location,
+                              style: AppTheme.of(context).bodyMedium.override(
+                                    font: GoogleFonts.inter(
+                                      fontWeight: AppTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: AppTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: Color(0xFF666666),
+                                    fontSize: 14,
+                                    letterSpacing: 0.0,
+                                    fontStyle: AppTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:loyola_app22/app_components/app_animations.dart';
 import 'package:loyola_app22/app_components/app_theme.dart';
 import 'package:loyola_app22/app_components/app_util.dart';
 import 'package:loyola_app22/app_components/app_widgets.dart';
+import 'package:loyola_app22/app_components/nav_extensions.dart';
 import 'dart:math';
 import 'dart:ui';
 import '/index.dart';
@@ -616,17 +617,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                         child: AppButton(
                                           onPressed: () async {
                                             if ((_model.tfCodigoTextController
-                                                            .text ==
-                                                        null ||
-                                                    _model.tfCodigoTextController
-                                                            .text ==
-                                                        '') ||
-                                                (_model.tfCITextController
-                                                            .text ==
-                                                        null ||
-                                                    _model.tfCITextController
-                                                            .text ==
-                                                        '')) {
+                                                        ?.text?.isEmpty ??
+                                                    true) ||
+                                                (_model.tfCITextController?.text
+                                                        ?.isEmpty ??
+                                                    true)) {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                 SnackBar(
@@ -725,6 +720,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                   width: 80,
                                   height: 80,
                                   fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Icon(Icons.school, size: 80);
+                                  },
                                 ),
                               ).animateOnPageLoad(
                                   animationsMap['imageOnPageLoadAnimation']!),

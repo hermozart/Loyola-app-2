@@ -4,6 +4,9 @@ import 'package:table_calendar/table_calendar.dart';
 class AcademicCalendarPage extends StatefulWidget {
   const AcademicCalendarPage({Key? key}) : super(key: key);
 
+  static String routeName = 'AcademicCalendarPage';
+  static String routePath = '/academicCalendarPage';
+
   @override
   State<AcademicCalendarPage> createState() => _AcademicCalendarPageState();
 }
@@ -12,7 +15,6 @@ class _AcademicCalendarPageState extends State<AcademicCalendarPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
-  // Eventos en español
   final Map<DateTime, List<String>> _events = {
     DateTime(2024, 12, 12): ['Examen'],
     DateTime(2024, 12, 15): ['Examen'],
@@ -43,8 +45,12 @@ class _AcademicCalendarPageState extends State<AcademicCalendarPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF8C1D40),
-        title: Text('Calendario Académico'),
+        title: Text(
+          'Calendario Académico',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Column(
         children: [
@@ -55,6 +61,7 @@ class _AcademicCalendarPageState extends State<AcademicCalendarPage> {
                 Text(
                   'Mantente al día con tu recorrido académico',
                   style: TextStyle(color: Colors.black87, fontSize: 16),
+                  textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 8),
                 Row(
@@ -95,7 +102,7 @@ class _AcademicCalendarPageState extends State<AcademicCalendarPage> {
                       height: 20,
                       margin: EdgeInsets.symmetric(horizontal: 1),
                       decoration: BoxDecoration(
-                        color: getEventColor(e),
+                        color: getEventColor(e.toString()),
                         shape: BoxShape.circle,
                       ),
                     );
@@ -156,16 +163,26 @@ class _AcademicCalendarPageState extends State<AcademicCalendarPage> {
   Widget _buildEventsList(DateTime day) {
     List<String> events = getEventsForDay(day);
     if (events.isEmpty) {
-      return Center(child: Text("No hay eventos para este día."));
+      return Center(
+        child: Text(
+          "No hay eventos para este día.",
+          style: TextStyle(fontSize: 16, color: Colors.black54),
+        ),
+      );
     }
     return ListView.builder(
       itemCount: events.length,
       itemBuilder: (context, index) {
         String tipo = events[index];
         return Card(
+          elevation: 2,
+          margin: EdgeInsets.only(bottom: 12),
           child: ListTile(
             leading: Icon(Icons.event, color: getEventColor(tipo)),
-            title: Text(tipo),
+            title: Text(
+              tipo,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             subtitle: Text("${day.day} ${_monthName(day.month)} ${day.year}"),
           ),
         );
