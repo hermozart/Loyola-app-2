@@ -69,7 +69,7 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Academic Agenda',
+                            'Agenda Académica',
                             style: AppTheme.of(context).headlineLarge.override(
                                   font: GoogleFonts.interTight(
                                     fontWeight: FontWeight.bold,
@@ -95,7 +95,7 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                               size: 24,
                             ),
                             onPressed: () {
-                              print('IconButton pressed ...');
+                              print('Crear nuevo evento');
                             },
                           ),
                         ],
@@ -103,7 +103,7 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                         child: Text(
-                          'Stay organized with your academic schedule',
+                          'Mantente organizado con tu agenda académica',
                           style: AppTheme.of(context).bodyMedium.override(
                                 font: GoogleFonts.inter(
                                   fontWeight: AppTheme.of(context)
@@ -145,7 +145,7 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'December 2024',
+                                'Diciembre 2024',
                                 style: AppTheme.of(context).titleLarge.override(
                                       font: GoogleFonts.interTight(
                                         fontWeight: FontWeight.w600,
@@ -173,7 +173,7 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                                       size: 16,
                                     ),
                                     onPressed: () {
-                                      print('IconButton pressed ...');
+                                      print('Mes anterior');
                                     },
                                   ),
                                   SizedBox(width: 8),
@@ -187,7 +187,7 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                                       size: 16,
                                     ),
                                     onPressed: () {
-                                      print('IconButton pressed ...');
+                                      print('Mes siguiente');
                                     },
                                   ),
                                 ],
@@ -262,16 +262,16 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      _buildFilterChip(context, 'All', true),
+                      _buildFilterChip(context, 'Todos', true),
                       SizedBox(width: 8),
                       _buildFilterChip(
-                          context, 'Classes', false, Icons.school_rounded),
+                          context, 'Clases', false, Icons.school_rounded),
                       SizedBox(width: 8),
                       _buildFilterChip(
-                          context, 'Exams', false, Icons.quiz_rounded),
+                          context, 'Exámenes', false, Icons.quiz_rounded),
                       SizedBox(width: 8),
                       _buildFilterChip(
-                          context, 'Meetings', false, Icons.groups_rounded),
+                          context, 'Reuniones', false, Icons.groups_rounded),
                     ],
                   ),
                 ),
@@ -286,13 +286,13 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                     children: [
                       _buildEventCard(
                         context,
-                        'DEC',
+                        'DIC',
                         '13',
-                        'Final Exam - Business Ethics',
-                        'Room: Johnson Hall 205',
+                        'Examen Final - Ética Empresarial',
+                        'Aula: Johnson Hall 205',
                         '2:00 PM - 4:00 PM',
-                        'Campus Center',
-                        'EXAM',
+                        'Centro del Campus',
+                        'EXAMEN',
                         Color(0xFFFFE6E6),
                         Color(0xFF8C1D40),
                         true,
@@ -300,13 +300,13 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                       SizedBox(height: 12),
                       _buildEventCard(
                         context,
-                        'DEC',
+                        'DIC',
                         '14',
-                        'Marketing Strategy Presentation',
-                        'Professor Martinez - Group Project',
+                        'Presentación de Estrategia de Marketing',
+                        'Profesor Martínez - Proyecto Grupal',
                         '10:30 AM - 12:00 PM',
-                        'Business Building',
-                        'CLASS',
+                        'Edificio de Negocios',
+                        'CLASE',
                         Color(0xFFE6F3FF),
                         Color(0xFF0066CC),
                         false,
@@ -314,13 +314,13 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                       SizedBox(height: 12),
                       _buildEventCard(
                         context,
-                        'DEC',
+                        'DIC',
                         '15',
-                        'Student Council Meeting',
-                        'Monthly planning session',
+                        'Reunión del Consejo Estudiantil',
+                        'Sesión de planificación mensual',
                         '4:00 PM - 5:30 PM',
-                        'Student Union',
-                        'MEETING',
+                        'Unión Estudiantil',
+                        'REUNIÓN',
                         Color(0xFFE6FFE6),
                         Color(0xFF00AA00),
                         false,

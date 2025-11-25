@@ -4,7 +4,7 @@ import 'package:loyola_app22/app_components/app_util.dart';
 import 'package:loyola_app22/app_components/app_widgets.dart';
 import 'package:loyola_app22/app_components/nav_extensions.dart';
 import 'package:loyola_app22/home_page.dart';
-import 'package:loyola_app22/home_page_model.dart';
+import 'package:loyola_app22/services/auth_service.dart';
 import 'dart:math';
 import 'dart:ui';
 import '/index.dart';
@@ -30,6 +30,8 @@ class LoginPageWidget extends StatefulWidget {
 class _LoginPageWidgetState extends State<LoginPageWidget>
     with TickerProviderStateMixin {
   late LoginPageModel _model;
+  final AuthService _authService = AuthService();
+  bool _isLoading = false;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -217,8 +219,70 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    if ((_model.tfCodigoTextController?.text?.isEmpty ?? true) ||
+        (_model.tfCITextController?.text?.isEmpty ?? true)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Por favor, completa todos los campos.',
+            style: GoogleFonts.roboto(color: Colors.white),
+          ),
+          duration: Duration(milliseconds: 2000),
+          backgroundColor: Color(0xFFB71C1C),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final resultado = await _authService.iniciarSesion(
+      carnet: _model.tfCITextController!.text.trim(),
+      codigo: _model.tfCodigoTextController!.text,
+    );
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (!mounted) return;
+
+    if (resultado['success']) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePageWidget(),
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '¡Bienvenido ${resultado['usuario']['nombre']}!',
+            style: GoogleFonts.roboto(color: Colors.white),
+          ),
+          duration: Duration(milliseconds: 2000),
+          backgroundColor: Color(0xFF02CA79),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            resultado['message'],
+            style: GoogleFonts.roboto(color: Colors.white),
+          ),
+          duration: Duration(milliseconds: 3000),
+          backgroundColor: Color(0xFFB71C1C),
+        ),
+      );
+    }
   }
 
   @override
@@ -305,10 +369,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                               BoxShadow(
                                 blurRadius: 4,
                                 color: Color(0x33000000),
-                                offset: Offset(
-                                  0,
-                                  2,
-                                ),
+                                offset: Offset(0, 2),
                               )
                             ],
                             borderRadius: BorderRadius.circular(12),
@@ -382,130 +443,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                           width: double.infinity,
                                           child: TextFormField(
                                             controller:
-                                                _model.tfCodigoTextController,
-                                            focusNode: _model.tfCodigoFocusNode,
-                                            autofocus: true,
-                                            autofillHints: [
-                                              AutofillHints.email
-                                            ],
-                                            obscureText: false,
-                                            decoration: InputDecoration(
-                                              labelText: 'Código de Registro',
-                                              labelStyle: AppTheme.of(context)
-                                                  .labelLarge
-                                                  .override(
-                                                    font:
-                                                        GoogleFonts.nunitoSans(
-                                                      fontWeight:
-                                                          AppTheme.of(context)
-                                                              .labelLarge
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          AppTheme.of(context)
-                                                              .labelLarge
-                                                              .fontStyle,
-                                                    ),
-                                                    fontSize: 20,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        AppTheme.of(context)
-                                                            .labelLarge
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        AppTheme.of(context)
-                                                            .labelLarge
-                                                            .fontStyle,
-                                                  ),
-                                              hintText:
-                                                  'Ingresa tu código de estudiante',
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: AppTheme.of(context)
-                                                      .primaryBackground,
-                                                  width: 2,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: AppTheme.of(context)
-                                                      .primary,
-                                                  width: 2,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              errorBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: AppTheme.of(context)
-                                                      .alternate,
-                                                  width: 2,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: AppTheme.of(context)
-                                                      .alternate,
-                                                  width: 2,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              filled: true,
-                                              fillColor: AppTheme.of(context)
-                                                  .primaryBackground,
-                                              prefixIcon: Icon(
-                                                Icons.person,
-                                              ),
-                                            ),
-                                            style: AppTheme.of(context)
-                                                .bodyLarge
-                                                .override(
-                                                  font: GoogleFonts.nunitoSans(
-                                                    fontWeight:
-                                                        AppTheme.of(context)
-                                                            .bodyLarge
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        AppTheme.of(context)
-                                                            .bodyLarge
-                                                            .fontStyle,
-                                                  ),
-                                                  letterSpacing: 0.0,
-                                                  fontWeight:
-                                                      AppTheme.of(context)
-                                                          .bodyLarge
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      AppTheme.of(context)
-                                                          .bodyLarge
-                                                          .fontStyle,
-                                                ),
-                                            keyboardType:
-                                                TextInputType.emailAddress,
-                                            validator: _model
-                                                .tfCodigoTextControllerValidator
-                                                .asValidator(context),
-                                          ),
-                                        ).animateOnPageLoad(animationsMap[
-                                            'textFieldOnPageLoadAnimation1']!),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 0, 16),
-                                        child: Container(
-                                          width: double.infinity,
-                                          child: TextFormField(
-                                            controller:
                                                 _model.tfCITextController,
                                             focusNode: _model.tfCIFocusNode,
                                             autofocus: true,
                                             autofillHints: [
-                                              AutofillHints.password
+                                              AutofillHints.username
                                             ],
                                             obscureText: false,
                                             decoration: InputDecoration(
@@ -605,7 +547,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                                           .fontStyle,
                                                 ),
                                             keyboardType: TextInputType.number,
-                                            enableInteractiveSelection: false,
                                             validator: _model
                                                 .tfCITextControllerValidator
                                                 .asValidator(context),
@@ -616,59 +557,128 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0, 0, 0, 16),
-                                        child: AppButton(
-                                          onPressed: () async {
-                                            if ((_model.tfCodigoTextController
-                                                        ?.text?.isEmpty ??
-                                                    true) ||
-                                                (_model.tfCITextController?.text
-                                                        ?.isEmpty ??
-                                                    true)) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: Text(
-                                                    'Por favor, completa todos los campos.',
-                                                    style: GoogleFonts.roboto(
-                                                      color: Colors.white,
+                                        child: Container(
+                                          width: double.infinity,
+                                          child: TextFormField(
+                                            controller:
+                                                _model.tfCodigoTextController,
+                                            focusNode: _model.tfCodigoFocusNode,
+                                            autofocus: false,
+                                            autofillHints: [
+                                              AutofillHints.password
+                                            ],
+                                            obscureText: true,
+                                            decoration: InputDecoration(
+                                              labelText: 'Código de Acceso',
+                                              labelStyle: AppTheme.of(context)
+                                                  .labelLarge
+                                                  .override(
+                                                    font:
+                                                        GoogleFonts.nunitoSans(
+                                                      fontWeight:
+                                                          AppTheme.of(context)
+                                                              .labelLarge
+                                                              .fontWeight,
+                                                      fontStyle:
+                                                          AppTheme.of(context)
+                                                              .labelLarge
+                                                              .fontStyle,
                                                     ),
+                                                    fontSize: 20,
+                                                    letterSpacing: 0.0,
+                                                    fontWeight:
+                                                        AppTheme.of(context)
+                                                            .labelLarge
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        AppTheme.of(context)
+                                                            .labelLarge
+                                                            .fontStyle,
                                                   ),
-                                                  duration: Duration(
-                                                      milliseconds: 2000),
-                                                  backgroundColor:
-                                                      Color(0xFFB71C1C),
+                                              hintText: 'Ingresa tu código',
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: AppTheme.of(context)
+                                                      .primaryBackground,
+                                                  width: 2,
                                                 ),
-                                              );
-                                            } else {
-                                              // if (Navigator.of(context)
-                                              //     .canPop()) {
-                                              //   context.pop();
-                                              // }
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return HomePageWidget();
-                                                  },
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: AppTheme.of(context)
+                                                      .primary,
+                                                  width: 2,
                                                 ),
-                                              );
-                                              // context.pushNamed(
-                                              //   HomePageWidget.routeName,
-                                              //   extra: <String, dynamic>{
-                                              //     kTransitionInfoKey:
-                                              //         TransitionInfo(
-                                              //       hasTransition: true,
-                                              //       transitionType:
-                                              //           PageTransitionType
-                                              //               .leftToRight,
-                                              //       duration: Duration(
-                                              //           milliseconds: 300),
-                                              //     ),
-                                              //   },
-                                              // );
-                                            }
-                                          },
-                                          text: 'Ingresar',
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                              errorBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: AppTheme.of(context)
+                                                      .alternate,
+                                                  width: 2,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                              focusedErrorBorder:
+                                                  OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: AppTheme.of(context)
+                                                      .alternate,
+                                                  width: 2,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                              filled: true,
+                                              fillColor: AppTheme.of(context)
+                                                  .primaryBackground,
+                                              prefixIcon: Icon(
+                                                Icons.lock,
+                                              ),
+                                            ),
+                                            style: AppTheme.of(context)
+                                                .bodyLarge
+                                                .override(
+                                                  font: GoogleFonts.nunitoSans(
+                                                    fontWeight:
+                                                        AppTheme.of(context)
+                                                            .bodyLarge
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        AppTheme.of(context)
+                                                            .bodyLarge
+                                                            .fontStyle,
+                                                  ),
+                                                  letterSpacing: 0.0,
+                                                  fontWeight:
+                                                      AppTheme.of(context)
+                                                          .bodyLarge
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      AppTheme.of(context)
+                                                          .bodyLarge
+                                                          .fontStyle,
+                                                ),
+                                            validator: _model
+                                                .tfCodigoTextControllerValidator
+                                                .asValidator(context),
+                                          ),
+                                        ).animateOnPageLoad(animationsMap[
+                                            'textFieldOnPageLoadAnimation1']!),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 0, 16),
+                                        child: AppButton(
+                                          onPressed:
+                                              _isLoading ? null : _handleLogin,
+                                          text: _isLoading
+                                              ? 'Ingresando...'
+                                              : 'INGRESAR',
                                           options: AppButtonOptions(
                                             width: double.infinity,
                                             height: 44,
