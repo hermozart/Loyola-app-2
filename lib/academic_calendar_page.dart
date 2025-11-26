@@ -213,7 +213,8 @@ class _AcademicCalendarPageState extends State<AcademicCalendarPage> {
                       fechaSeleccionada,
                     );
 
-                    Navigator.pop(context);
+                    // CERRAR DIALOG DE AGREGAR EVENTO
+                    Navigator.of(context).pop();
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

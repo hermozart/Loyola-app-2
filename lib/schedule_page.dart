@@ -238,10 +238,9 @@ class _HorariosPageWidgetState extends State<HorariosPageWidget> {
                   child: Padding(
                     padding: EdgeInsets.all(12),
                     child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
+                          flex: 2,
                           child: TextFormField(
                             controller: _model.textController,
                             focusNode: _model.textFieldFocusNode,
@@ -329,46 +328,50 @@ class _HorariosPageWidgetState extends State<HorariosPageWidget> {
                           ),
                         ),
                         SizedBox(width: 8),
-                        AppDropDown<String>(
-                          controller: _model.dropDownValueController ??=
-                              FormFieldController<String>(null),
-                          options: [
-                            'Monday',
-                            'Tuesday',
-                            'Wednesday',
-                            'Thursday',
-                            'Friday'
-                          ],
-                          onChanged: (val) =>
-                              safeSetState(() => _model.dropDownValue = val),
-                          width: 100,
-                          height: 48,
-                          textStyle: AppTheme.of(context).bodyMedium.override(
-                                font: GoogleFonts.inter(
+                        Expanded(
+                          flex: 1,
+                          child: AppDropDown<String>(
+                            controller: _model.dropDownValueController ??=
+                                FormFieldController<String>(null),
+                            options: [
+                              'Monday',
+                              'Tuesday',
+                              'Wednesday',
+                              'Thursday',
+                              'Friday'
+                            ],
+                            onChanged: (val) =>
+                                safeSetState(() => _model.dropDownValue = val),
+                            width: 100,
+                            height: 48,
+                            textStyle: AppTheme.of(context).bodyMedium.override(
+                                  font: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w600,
+                                    fontStyle: AppTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                                  letterSpacing: 0.0,
                                   fontWeight: FontWeight.w600,
                                   fontStyle:
                                       AppTheme.of(context).bodyMedium.fontStyle,
                                 ),
-                                letterSpacing: 0.0,
-                                fontWeight: FontWeight.w600,
-                                fontStyle:
-                                    AppTheme.of(context).bodyMedium.fontStyle,
-                              ),
-                          hintText: 'Today',
-                          icon: Icon(
-                            Icons.keyboard_arrow_down_rounded,
-                            color: AppTheme.of(context).secondaryText,
-                            size: 20,
+                            hintText: 'Today',
+                            icon: Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color: AppTheme.of(context).secondaryText,
+                              size: 12,
+                            ),
+                            fillColor: AppTheme.of(context).primaryBackground,
+                            elevation: 0,
+                            borderColor: AppTheme.of(context).alternate,
+                            borderWidth: 1,
+                            borderRadius: 12,
+                            margin: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                            hidesUnderline: true,
+                            isSearchable: false,
+                            isMultiSelect: false,
                           ),
-                          fillColor: AppTheme.of(context).primaryBackground,
-                          elevation: 0,
-                          borderColor: AppTheme.of(context).alternate,
-                          borderWidth: 1,
-                          borderRadius: 12,
-                          margin: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                          hidesUnderline: true,
-                          isSearchable: false,
-                          isMultiSelect: false,
                         ),
                       ],
                     ),

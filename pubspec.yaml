@@ -51,7 +51,7 @@ dependencies:
   url_launcher_web: 2.4.1
   url_launcher_windows: 3.1.4
   table_calendar: 3.2.0
-  firebase_core: ^4.2.1
+  firebase_core: ^3.15.2
   firebase_auth: ^5.3.1
   cloud_firestore: ^5.4.4
   crypto: ^3.0.3

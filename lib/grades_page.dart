@@ -104,7 +104,6 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
                       Expanded(
                         child: Container(
                           width: 100,
-                          height: 80,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow: [
@@ -173,7 +172,6 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
                       Expanded(
                         child: Container(
                           width: 100,
-                          height: 80,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow: [
@@ -242,7 +240,6 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
                       Expanded(
                         child: Container(
                           width: 100,
-                          height: 80,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow: [
