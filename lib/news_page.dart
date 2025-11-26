@@ -1,6 +1,7 @@
 import 'package:loyola_app22/app_components/app_theme.dart';
 import 'package:loyola_app22/app_components/app_util.dart';
 import 'package:loyola_app22/app_components/app_widgets.dart';
+import 'package:loyola_app22/services/firestore_service.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,8 @@ class NewsPageWidget extends StatefulWidget {
 
 class _NewsPageWidgetState extends State<NewsPageWidget> {
   late NewsPageModel _model;
+  final FirestoreService _firestoreService = FirestoreService();
+  String _categoriaSeleccionada = 'Todas';
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -37,8 +40,32 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
+  }
+
+  String _formatearFecha(dynamic timestamp) {
+    if (timestamp == null) return '';
+    try {
+      final fecha = timestamp.toDate();
+      const meses = [
+        '',
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'Abril',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Septiembre',
+        'Octubre',
+        'Noviembre',
+        'Diciembre'
+      ];
+      return '${fecha.day} de ${meses[fecha.month]}, ${fecha.year}';
+    } catch (e) {
+      return '';
+    }
   }
 
   @override
@@ -86,87 +113,94 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
             ),
             child: Padding(
               padding: EdgeInsets.all(16),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 4,
-                            color: Color(0x1A000000),
-                            offset: Offset(0.0, 2),
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: TextFormField(
-                        controller: _model.textController,
-                        focusNode: _model.textFieldFocusNode,
-                        autofocus: false,
-                        textInputAction: TextInputAction.search,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          hintText: 'Buscar noticias…',
-                          hintStyle: AppTheme.of(context).bodyMedium.override(
-                                font: GoogleFonts.nunitoSans(
-                                  fontWeight: AppTheme.of(context)
-                                      .bodyMedium
-                                      .fontWeight,
-                                  fontStyle:
-                                      AppTheme.of(context).bodyMedium.fontStyle,
-                                ),
-                                color: Color(0xFF999999),
-                                letterSpacing: 0.0,
-                                fontWeight:
-                                    AppTheme.of(context).bodyMedium.fontWeight,
-                                fontStyle:
-                                    AppTheme.of(context).bodyMedium.fontStyle,
-                              ),
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          focusedErrorBorder: InputBorder.none,
-                          contentPadding:
-                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Color(0xFF999999),
-                            size: 20,
-                          ),
-                        ),
-                        style: AppTheme.of(context).bodyMedium.override(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 4,
+                          color: Color(0x1A000000),
+                          offset: Offset(0.0, 2),
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: TextFormField(
+                      controller: _model.textController,
+                      focusNode: _model.textFieldFocusNode,
+                      autofocus: false,
+                      textInputAction: TextInputAction.search,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        hintText: 'Buscar noticias…',
+                        hintStyle: AppTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.nunitoSans(
                                 fontWeight:
                                     AppTheme.of(context).bodyMedium.fontWeight,
                                 fontStyle:
                                     AppTheme.of(context).bodyMedium.fontStyle,
                               ),
-                              color: Color(0xFF333333),
+                              color: Color(0xFF999999),
                               letterSpacing: 0.0,
                               fontWeight:
                                   AppTheme.of(context).bodyMedium.fontWeight,
                               fontStyle:
                                   AppTheme.of(context).bodyMedium.fontStyle,
                             ),
-                        cursorColor: Color(0xFF8C1D40),
-                        validator:
-                            _model.textControllerValidator.asValidator(context),
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        focusedErrorBorder: InputBorder.none,
+                        contentPadding:
+                            EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Color(0xFF999999),
+                          size: 20,
+                        ),
                       ),
+                      style: AppTheme.of(context).bodyMedium.override(
+                            font: GoogleFonts.nunitoSans(
+                              fontWeight:
+                                  AppTheme.of(context).bodyMedium.fontWeight,
+                              fontStyle:
+                                  AppTheme.of(context).bodyMedium.fontStyle,
+                            ),
+                            color: Color(0xFF333333),
+                            letterSpacing: 0.0,
+                            fontWeight:
+                                AppTheme.of(context).bodyMedium.fontWeight,
+                            fontStyle:
+                                AppTheme.of(context).bodyMedium.fontStyle,
+                          ),
+                      cursorColor: Color(0xFF8C1D40),
+                      validator:
+                          _model.textControllerValidator.asValidator(context),
                     ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Container(
+                  ),
+                  SizedBox(height: 16),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _categoriaSeleccionada = 'Todas';
+                            });
+                          },
+                          child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: _categoriaSeleccionada == 'Todas'
+                                  ? Colors.white
+                                  : Color(0x33FFFFFF),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Padding(
@@ -181,7 +215,9 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
                                             .bodyMedium
                                             .fontStyle,
                                       ),
-                                      color: Color(0xFF8C1D40),
+                                      color: _categoriaSeleccionada == 'Todas'
+                                          ? Color(0xFF8C1D40)
+                                          : Colors.white,
                                       letterSpacing: 0.0,
                                       fontWeight: FontWeight.w600,
                                       fontStyle: AppTheme.of(context)
@@ -191,10 +227,19 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 12),
-                          Container(
+                        ),
+                        SizedBox(width: 12),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _categoriaSeleccionada = 'Anuncios';
+                            });
+                          },
+                          child: Container(
                             decoration: BoxDecoration(
-                              color: Color(0x33FFFFFF),
+                              color: _categoriaSeleccionada == 'Anuncios'
+                                  ? Colors.white
+                                  : Color(0x33FFFFFF),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Padding(
@@ -209,7 +254,10 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
                                             .bodyMedium
                                             .fontStyle,
                                       ),
-                                      color: Colors.white,
+                                      color:
+                                          _categoriaSeleccionada == 'Anuncios'
+                                              ? Color(0xFF8C1D40)
+                                              : Colors.white,
                                       letterSpacing: 0.0,
                                       fontWeight: FontWeight.w500,
                                       fontStyle: AppTheme.of(context)
@@ -219,10 +267,19 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 12),
-                          Container(
+                        ),
+                        SizedBox(width: 12),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _categoriaSeleccionada = 'Eventos';
+                            });
+                          },
+                          child: Container(
                             decoration: BoxDecoration(
-                              color: Color(0x33FFFFFF),
+                              color: _categoriaSeleccionada == 'Eventos'
+                                  ? Colors.white
+                                  : Color(0x33FFFFFF),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Padding(
@@ -237,7 +294,9 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
                                             .bodyMedium
                                             .fontStyle,
                                       ),
-                                      color: Colors.white,
+                                      color: _categoriaSeleccionada == 'Eventos'
+                                          ? Color(0xFF8C1D40)
+                                          : Colors.white,
                                       letterSpacing: 0.0,
                                       fontWeight: FontWeight.w500,
                                       fontStyle: AppTheme.of(context)
@@ -247,10 +306,19 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 12),
-                          Container(
+                        ),
+                        SizedBox(width: 12),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _categoriaSeleccionada = 'Académico';
+                            });
+                          },
+                          child: Container(
                             decoration: BoxDecoration(
-                              color: Color(0x33FFFFFF),
+                              color: _categoriaSeleccionada == 'Académico'
+                                  ? Colors.white
+                                  : Color(0x33FFFFFF),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Padding(
@@ -265,7 +333,10 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
                                             .bodyMedium
                                             .fontStyle,
                                       ),
-                                      color: Colors.white,
+                                      color:
+                                          _categoriaSeleccionada == 'Académico'
+                                              ? Color(0xFF8C1D40)
+                                              : Colors.white,
                                       letterSpacing: 0.0,
                                       fontWeight: FontWeight.w500,
                                       fontStyle: AppTheme.of(context)
@@ -275,53 +346,68 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        _buildNewsCard(
-                          context,
-                          'https://images.unsplash.com/photo-1719947447450-a336dd9fed9a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjExMTI3NzV8&ixlib=rb-4.1.0&q=80&w=1080',
-                          'Nueva biblioteca digital disponible para estudiantes',
-                          '15 de Enero, 2024',
-                          'La universidad inaugura su nueva plataforma digital con más de 50,000 recursos académicos disponibles para toda la comunidad estudiantil.',
-                        ),
-                        _buildNewsCard(
-                          context,
-                          'https://images.unsplash.com/photo-1756272626109-b3342b560b0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjExMTI3NzV8&ixlib=rb-4.1.0&q=80&w=1080',
-                          'Ceremonia de graduación programada para marzo',
-                          '12 de Enero, 2024',
-                          'Más de 800 estudiantes recibirán sus diplomas en la ceremonia que se realizará en el auditorio principal del campus.',
-                        ),
-                        _buildNewsCard(
-                          context,
-                          'https://images.unsplash.com/photo-1626775828391-01c19133e487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjExMTI3NzR8&ixlib=rb-4.1.0&q=80&w=1080',
-                          'Convocatoria abierta para proyectos de investigación',
-                          '10 de Enero, 2024',
-                          'Se invita a estudiantes y profesores a participar en la nueva convocatoria de fondos para proyectos de investigación interdisciplinaria.',
-                        ),
-                        _buildNewsCard(
-                          context,
-                          'https://images.unsplash.com/photo-1710880135020-e0af9cc79dcc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjExMTI3NzV8&ixlib=rb-4.1.0&q=80&w=1080',
-                          'Torneo interuniversitario de deportes 2024',
-                          '8 de Enero, 2024',
-                          'Loyola participará en el torneo nacional con equipos de fútbol, baloncesto y voleibol. Las inscripciones están abiertas.',
-                        ),
-                        _buildNewsCard(
-                          context,
-                          'https://images.unsplash.com/photo-1579623003002-841f9dee24d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjExMTI3NzV8&ixlib=rb-4.1.0&q=80&w=1080',
-                          'Nuevo laboratorio de inteligencia artificial',
-                          '5 de Enero, 2024',
-                          'La facultad de ingeniería estrena modernas instalaciones equipadas con la última tecnología para investigación en IA.',
                         ),
                       ],
                     ),
-                  ]
-                      .divide(SizedBox(height: 16))
-                      .addToStart(SizedBox(height: 16)),
-                ),
+                  ),
+                  SizedBox(height: 16),
+                  Expanded(
+                    child: StreamBuilder<List<Map<String, dynamic>>>(
+                      stream: _firestoreService
+                          .obtenerNoticiasPorCategoria(_categoriaSeleccionada),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          );
+                        }
+
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              'Error al cargar noticias',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          );
+                        }
+
+                        final noticias = snapshot.data ?? [];
+
+                        if (noticias.isEmpty) {
+                          return Center(
+                            child: Text(
+                              'No hay noticias disponibles',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          );
+                        }
+
+                        return ListView.builder(
+                          padding: EdgeInsets.zero,
+                          itemCount: noticias.length,
+                          itemBuilder: (context, index) {
+                            final noticia = noticias[index];
+                            return _buildNewsCard(
+                              context,
+                              noticia['imagenUrl'] ??
+                                  noticia['imagen_url'] ??
+                                  '',
+                              noticia['titulo'] ?? '',
+                              _formatearFecha(noticia['fecha']),
+                              noticia['descripcionCorta'] ??
+                                  noticia['contenido'] ??
+                                  '',
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -368,6 +454,11 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
                 width: double.infinity,
                 height: 180,
                 fit: BoxFit.cover,
+                errorWidget: (context, url, error) => Container(
+                  height: 180,
+                  color: Color(0xFFE0E0E0),
+                  child: Icon(Icons.image, size: 50, color: Colors.grey),
+                ),
               ),
             ),
             Padding(

@@ -95,7 +95,7 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                               size: 24,
                             ),
                             onPressed: () {
-                              print('Crear nuevo evento');
+                              _mostrarDialogoCrearEvento(context);
                             },
                           ),
                         ],
@@ -610,6 +610,124 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
           ],
         ),
       ),
+    );
+  }
+
+  void _mostrarDialogoCrearEvento(BuildContext context) {
+    final tituloController = TextEditingController();
+    final descripcionController = TextEditingController();
+    final ubicacionController = TextEditingController();
+    final horaInicioController = TextEditingController();
+    final horaFinController = TextEditingController();
+    String tipoSeleccionado = 'clase';
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Crear Nuevo Evento',
+            style: GoogleFonts.interTight(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: tituloController,
+                  decoration: InputDecoration(
+                    labelText: 'Título',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 12),
+                TextField(
+                  controller: descripcionController,
+                  decoration: InputDecoration(
+                    labelText: 'Descripción',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 2,
+                ),
+                SizedBox(height: 12),
+                TextField(
+                  controller: ubicacionController,
+                  decoration: InputDecoration(
+                    labelText: 'Ubicación',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 12),
+                TextField(
+                  controller: horaInicioController,
+                  decoration: InputDecoration(
+                    labelText: 'Hora Inicio (ej: 10:00)',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 12),
+                TextField(
+                  controller: horaFinController,
+                  decoration: InputDecoration(
+                    labelText: 'Hora Fin (ej: 12:00)',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 12),
+                DropdownButtonFormField<String>(
+                  value: tipoSeleccionado,
+                  decoration: InputDecoration(
+                    labelText: 'Tipo de Evento',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: [
+                    DropdownMenuItem(value: 'clase', child: Text('Clase')),
+                    DropdownMenuItem(value: 'examen', child: Text('Examen')),
+                    DropdownMenuItem(value: 'reunion', child: Text('Reunión')),
+                  ],
+                  onChanged: (value) {
+                    tipoSeleccionado = value!;
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancelar'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF8C1D40),
+              ),
+              onPressed: () {
+                if (tituloController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('El título es obligatorio')),
+                  );
+                  return;
+                }
+
+                print('Evento creado: ${tituloController.text}');
+
+                Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Evento creado exitosamente'),
+                    backgroundColor: Color(0xFF02CA79),
+                  ),
+                );
+              },
+              child: Text('Crear', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:loyola_app22/app_components/app_animations.dart';
 import 'package:loyola_app22/app_components/app_theme.dart';
 import 'package:loyola_app22/app_components/app_util.dart';
 import 'package:loyola_app22/app_components/app_widgets.dart';
+import 'package:loyola_app22/perfil_page.dart';
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -254,14 +255,24 @@ class _HomePageWidgetState extends State<HomePageWidget>
                             ],
                           ),
                         ),
-                        Container(
-                          width: 50,
-                          height: 50,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(shape: BoxShape.circle),
-                          child: Image.network(
-                            'https://img.freepik.com/vector-premium/icono-membresia-plateado-icono-perfil-avatar-defecto-icono-miembros-imagen-usuario-redes-sociales-ilustracion-vectorial_561158-4215.jpg',
-                            fit: BoxFit.cover,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PerfilPage(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(shape: BoxShape.circle),
+                            child: Image.network(
+                              'https://img.freepik.com/vector-premium/icono-membresia-plateado-icono-perfil-avatar-defecto-icono-miembros-imagen-usuario-redes-sociales-ilustracion-vectorial_561158-4215.jpg',
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],
