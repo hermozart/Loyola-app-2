@@ -79,7 +79,7 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
       for (var doc in materiasSnapshot.docs) {
         final data = doc.data();
         final nota = (data['nota_final'] ?? 0).toDouble();
-        final creditos = (data['creditos'] ?? 0).toInt();
+        final int creditos = (data['creditos'] ?? 0).toInt();
         final estado = data['estado'] ?? '';
 
         materiasList.add({
@@ -220,7 +220,6 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
                       Expanded(
                         child: Container(
                           width: 100,
-                          height: 80,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow: [
@@ -289,7 +288,6 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
                       Expanded(
                         child: Container(
                           width: 100,
-                          height: 80,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow: [
@@ -358,7 +356,6 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
                       Expanded(
                         child: Container(
                           width: 100,
-                          height: 80,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow: [

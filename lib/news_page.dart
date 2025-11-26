@@ -68,6 +68,20 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
     }
   }
 
+  void _abrirDetalleNoticia(Map<String, dynamic> noticia) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NoticiaDetalleScreen(
+          titulo: noticia['titulo'] ?? '',
+          fecha: _formatearFecha(noticia['fecha']),
+          contenido: noticia['descripcionLarga'] ?? noticia['contenido'] ?? '',
+          imagenUrl: noticia['imagenUrl'] ?? noticia['imagen_url'] ?? '',
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -391,16 +405,19 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
                           itemCount: noticias.length,
                           itemBuilder: (context, index) {
                             final noticia = noticias[index];
-                            return _buildNewsCard(
-                              context,
-                              noticia['imagenUrl'] ??
-                                  noticia['imagen_url'] ??
-                                  '',
-                              noticia['titulo'] ?? '',
-                              _formatearFecha(noticia['fecha']),
-                              noticia['descripcionCorta'] ??
-                                  noticia['contenido'] ??
-                                  '',
+                            return GestureDetector(
+                              onTap: () => _abrirDetalleNoticia(noticia),
+                              child: _buildNewsCard(
+                                context,
+                                noticia['imagenUrl'] ??
+                                    noticia['imagen_url'] ??
+                                    '',
+                                noticia['titulo'] ?? '',
+                                _formatearFecha(noticia['fecha']),
+                                noticia['descripcionCorta'] ??
+                                    noticia['contenido'] ??
+                                    '',
+                              ),
                             );
                           },
                         );
@@ -516,6 +533,112 @@ class _NewsPageWidgetState extends State<NewsPageWidget> {
                           lineHeight: 1.4,
                         ),
                   ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Pantalla de detalle de noticia
+class NoticiaDetalleScreen extends StatelessWidget {
+  final String titulo;
+  final String fecha;
+  final String contenido;
+  final String imagenUrl;
+
+  const NoticiaDetalleScreen({
+    Key? key,
+    required this.titulo,
+    required this.fecha,
+    required this.contenido,
+    required this.imagenUrl,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Color(0xFF8C1D2E),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Noticia',
+          style: GoogleFonts.montserrat(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (imagenUrl.isNotEmpty)
+              CachedNetworkImage(
+                fadeInDuration: Duration(milliseconds: 0),
+                fadeOutDuration: Duration(milliseconds: 0),
+                imageUrl: imagenUrl,
+                width: double.infinity,
+                height: 250,
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) => Container(
+                  height: 250,
+                  color: Color(0xFFE0E0E0),
+                  child: Icon(Icons.image, size: 80, color: Colors.grey),
+                ),
+              ),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    titulo,
+                    style: GoogleFonts.montserrat(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF333333),
+                      height: 1.3,
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today,
+                        size: 16,
+                        color: Color(0xFF666666),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        fecha,
+                        style: GoogleFonts.nunitoSans(
+                          fontSize: 14,
+                          color: Color(0xFF666666),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 24),
+                  Text(
+                    contenido,
+                    style: GoogleFonts.nunitoSans(
+                      fontSize: 16,
+                      color: Color(0xFF555555),
+                      height: 1.6,
+                    ),
+                  ),
+                  SizedBox(height: 40),
                 ],
               ),
             ),

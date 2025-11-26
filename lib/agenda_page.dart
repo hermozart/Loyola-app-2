@@ -202,7 +202,7 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                             crossAxisCount: 7,
                             crossAxisSpacing: 4,
                             mainAxisSpacing: 4,
-                            childAspectRatio: 0.7,
+                            childAspectRatio: 0.8,
                           ),
                           primary: false,
                           shrinkWrap: true,
@@ -414,53 +414,50 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                 color: isHighlighted ? Color(0xFF8C1D40) : Color(0xFFF0F0F0),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Align(
-                      alignment: AlignmentDirectional(0, 0),
-                      child: Text(
-                        month,
-                        style: AppTheme.of(context).bodyMedium.override(
-                              font: GoogleFonts.inter(
-                                fontWeight: FontWeight.w600,
-                                fontStyle:
-                                    AppTheme.of(context).bodyMedium.fontStyle,
-                              ),
-                              color: isHighlighted
-                                  ? Colors.white
-                                  : Color(0xFF666666),
-                              fontSize: 12,
-                              letterSpacing: 0.0,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: AlignmentDirectional(0, 0),
+                    child: Text(
+                      month,
+                      style: AppTheme.of(context).bodyMedium.override(
+                            font: GoogleFonts.inter(
+                              fontWeight: FontWeight.w600,
                               fontStyle:
                                   AppTheme.of(context).bodyMedium.fontStyle,
                             ),
-                      ),
+                            color: isHighlighted
+                                ? Colors.white
+                                : Color(0xFF666666),
+                            fontSize: 12,
+                            letterSpacing: 0.0,
+                            fontStyle:
+                                AppTheme.of(context).bodyMedium.fontStyle,
+                          ),
                     ),
-                    Align(
-                      alignment: AlignmentDirectional(0, 0),
-                      child: Text(
-                        day,
-                        style: AppTheme.of(context).titleMedium.override(
-                              font: GoogleFonts.interTight(
-                                fontWeight: FontWeight.bold,
-                                fontStyle:
-                                    AppTheme.of(context).titleMedium.fontStyle,
-                              ),
-                              color: isHighlighted
-                                  ? Colors.white
-                                  : Color(0xFF333333),
-                              letterSpacing: 0.0,
+                  ),
+                  Align(
+                    alignment: AlignmentDirectional(0, 0),
+                    child: Text(
+                      day,
+                      style: AppTheme.of(context).titleMedium.override(
+                            font: GoogleFonts.interTight(
+                              fontWeight: FontWeight.bold,
                               fontStyle:
                                   AppTheme.of(context).titleMedium.fontStyle,
                             ),
-                      ),
+                            color: isHighlighted
+                                ? Colors.white
+                                : Color(0xFF333333),
+                            letterSpacing: 0.0,
+                            fontStyle:
+                                AppTheme.of(context).titleMedium.fontStyle,
+                          ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             SizedBox(width: 12),
@@ -538,7 +535,7 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
                     child: Row(
-                      mainAxisSize: MainAxisSize.max,
+                      // mainAxisSize: MainAxisSize.max,
                       children: [
                         Row(
                           mainAxisSize: MainAxisSize.max,
@@ -571,38 +568,38 @@ class _AgendaPageWidgetState extends State<AgendaPageWidget> {
                           ],
                         ),
                         SizedBox(width: 16),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Icon(
-                              Icons.location_on_rounded,
-                              color: Color(0xFF8C1D40),
-                              size: 16,
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              location,
-                              style: AppTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: AppTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: AppTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: Color(0xFF666666),
-                                    fontSize: 14,
-                                    letterSpacing: 0.0,
-                                    fontStyle: AppTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                            ),
-                          ],
-                        ),
                       ],
                     ),
+                  ),
+                  SizedBox(height: 12),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Icon(
+                        Icons.location_on_rounded,
+                        color: Color(0xFF8C1D40),
+                        size: 16,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        location,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: AppTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight:
+                                    AppTheme.of(context).bodyMedium.fontWeight,
+                                fontStyle:
+                                    AppTheme.of(context).bodyMedium.fontStyle,
+                              ),
+                              color: Color(0xFF666666),
+                              fontSize: 14,
+                              letterSpacing: 0.0,
+                              fontStyle:
+                                  AppTheme.of(context).bodyMedium.fontStyle,
+                            ),
+                      ),
+                    ],
                   ),
                 ],
               ),

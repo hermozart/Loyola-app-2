@@ -331,7 +331,9 @@ class _AcademicCalendarPageState extends State<AcademicCalendarPage> {
               ],
             ),
           ),
-          Expanded(
+          SizedBox(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height * 0.5,
             child: TableCalendar(
               firstDay: DateTime.utc(2024, 1, 1),
               lastDay: DateTime.utc(2026, 12, 31),
@@ -415,7 +417,7 @@ class _AcademicCalendarPageState extends State<AcademicCalendarPage> {
                     child: _buildEventsList(_selectedDay!),
                   ),
                 )
-              : Expanded(child: Container()),
+              : SizedBox(),
         ],
       ),
       floatingActionButton: FloatingActionButton(

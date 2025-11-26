@@ -3,6 +3,8 @@ import 'package:loyola_app22/app_components/app_icon_button.dart';
 import 'package:loyola_app22/app_components/app_theme.dart';
 import 'package:loyola_app22/app_components/app_util.dart';
 import 'package:loyola_app22/app_components/app_widgets.dart';
+import 'package:loyola_app22/services/auth_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,16 +26,31 @@ class HorariosPageWidget extends StatefulWidget {
 
 class _HorariosPageWidgetState extends State<HorariosPageWidget> {
   late HorariosPageModel _model;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final AuthService _authService = AuthService();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  List<Map<String, dynamic>> _horarios = [];
+  String _diaSeleccionado = 'Hoy';
+  bool _cargando = true;
+
+  final Map<int, String> _nombresDias = {
+    1: 'Lunes',
+    2: 'Martes',
+    3: 'Miércoles',
+    4: 'Jueves',
+    5: 'Viernes',
+    6: 'Sábado',
+    7: 'Domingo',
+  };
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => HorariosPageModel());
-
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
+    _cargarHorarios();
   }
 
   @override
@@ -42,8 +59,121 @@ class _HorariosPageWidgetState extends State<HorariosPageWidget> {
     super.dispose();
   }
 
+  Future<void> _cargarHorarios() async {
+    try {
+      final carnet = await _authService.obtenerCarnetActual();
+      if (carnet == null) return;
+
+      final querySnapshot = await _firestore
+          .collection('estudiantes')
+          .where('numeroCarnet', isEqualTo: carnet)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) return;
+
+      final estudianteId = querySnapshot.docs.first.id;
+
+      final horariosSnapshot = await _firestore
+          .collection('estudiantes')
+          .doc(estudianteId)
+          .collection('horarios')
+          .orderBy('diaNumero')
+          .orderBy('horaInicio')
+          .get();
+
+      List<Map<String, dynamic>> horariosList = [];
+
+      for (var doc in horariosSnapshot.docs) {
+        final data = doc.data();
+        horariosList.add({
+          'id': doc.id,
+          'nombreMateria': data['nombreMateria'] ?? '',
+          'aula': data['aula'] ?? '',
+          'horaInicio': data['horaInicio'] ?? '',
+          'horaFin': data['horaFin'] ?? '',
+          'diaNombre': data['diaNombre'] ?? '',
+          'diaNumero': data['diaNumero'] ?? 0,
+        });
+      }
+
+      setState(() {
+        _horarios = horariosList;
+        _cargando = false;
+      });
+    } catch (e) {
+      print('Error cargando horarios: $e');
+      setState(() {
+        _cargando = false;
+      });
+    }
+  }
+
+  List<Map<String, dynamic>> _filtrarHorariosPorDia() {
+    if (_diaSeleccionado == 'Hoy') {
+      final diaActual = DateTime.now().weekday;
+      return _horarios.where((h) => h['diaNumero'] == diaActual).toList();
+    }
+    return _horarios.where((h) => h['diaNombre'] == _diaSeleccionado).toList();
+  }
+
+  bool _esClaseEnProgreso(String horaInicio, String horaFin) {
+    try {
+      final ahora = DateTime.now();
+      final horaActual = ahora.hour * 60 + ahora.minute;
+
+      final inicioPartes = horaInicio.split(':');
+      final finPartes = horaFin.split(':');
+
+      final minutoInicio =
+          int.parse(inicioPartes[0]) * 60 + int.parse(inicioPartes[1]);
+      final minutoFin = int.parse(finPartes[0]) * 60 + int.parse(finPartes[1]);
+
+      return horaActual >= minutoInicio && horaActual <= minutoFin;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  String _obtenerAbreviaturaDia(String diaNombre) {
+    switch (diaNombre) {
+      case 'Lunes':
+        return 'LUN';
+      case 'Martes':
+        return 'MAR';
+      case 'Miércoles':
+        return 'MIÉ';
+      case 'Jueves':
+        return 'JUE';
+      case 'Viernes':
+        return 'VIE';
+      case 'Sábado':
+        return 'SÁB';
+      case 'Domingo':
+        return 'DOM';
+      default:
+        return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_cargando) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(0xFF8C1D40),
+          title: Text('Horarios', style: TextStyle(color: Colors.white)),
+          centerTitle: false,
+        ),
+        body: Center(
+          child: CircularProgressIndicator(color: Color(0xFF8C1D40)),
+        ),
+      );
+    }
+
+    final horariosFiltrados = _filtrarHorariosPorDia();
+    final diaActual = DateTime.now().day;
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -108,7 +238,7 @@ class _HorariosPageWidgetState extends State<HorariosPageWidget> {
                         ),
                   ),
                   Text(
-                    'Student Portal',
+                    'Portal Estudiantil',
                     style: AppTheme.of(context).bodySmall.override(
                           font: GoogleFonts.inter(
                             fontWeight:
@@ -141,7 +271,7 @@ class _HorariosPageWidgetState extends State<HorariosPageWidget> {
                       size: 20,
                     ),
                     onPressed: () {
-                      print('IconButton pressed ...');
+                      print('Calendario presionado');
                     },
                   ),
                   SizedBox(width: 8),
@@ -155,7 +285,7 @@ class _HorariosPageWidgetState extends State<HorariosPageWidget> {
                       size: 20,
                     ),
                     onPressed: () {
-                      print('IconButton pressed ...');
+                      print('Notificaciones presionadas');
                     },
                   ),
                 ],
@@ -188,7 +318,7 @@ class _HorariosPageWidgetState extends State<HorariosPageWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Class Schedule',
+                        'Horario de Clases',
                         style: AppTheme.of(context).headlineLarge.override(
                               font: GoogleFonts.interTight(
                                 fontWeight: FontWeight.bold,
@@ -206,7 +336,7 @@ class _HorariosPageWidgetState extends State<HorariosPageWidget> {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                         child: Text(
-                          'Spring 2024 • Week of March 18',
+                          'Semestre 2024-2 • ${_nombresDias[DateTime.now().weekday]}',
                           style: AppTheme.of(context).bodyMedium.override(
                                 font: GoogleFonts.inter(
                                   fontWeight: AppTheme.of(context)
@@ -247,7 +377,7 @@ class _HorariosPageWidgetState extends State<HorariosPageWidget> {
                             autofocus: false,
                             obscureText: false,
                             decoration: InputDecoration(
-                              hintText: 'Search classes...',
+                              hintText: 'Buscar clases...',
                               hintStyle: AppTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -334,14 +464,19 @@ class _HorariosPageWidgetState extends State<HorariosPageWidget> {
                             controller: _model.dropDownValueController ??=
                                 FormFieldController<String>(null),
                             options: [
-                              'Monday',
-                              'Tuesday',
-                              'Wednesday',
-                              'Thursday',
-                              'Friday'
+                              'Lunes',
+                              'Martes',
+                              'Miércoles',
+                              'Jueves',
+                              'Viernes',
+                              'Sábado'
                             ],
-                            onChanged: (val) =>
-                                safeSetState(() => _model.dropDownValue = val),
+                            onChanged: (val) {
+                              setState(() {
+                                _diaSeleccionado = val ?? 'Hoy';
+                                _model.dropDownValue = val;
+                              });
+                            },
                             width: 100,
                             height: 48,
                             textStyle: AppTheme.of(context).bodyMedium.override(
@@ -356,7 +491,7 @@ class _HorariosPageWidgetState extends State<HorariosPageWidget> {
                                   fontStyle:
                                       AppTheme.of(context).bodyMedium.fontStyle,
                                 ),
-                            hintText: 'Today',
+                            hintText: 'Hoy',
                             icon: Icon(
                               Icons.keyboard_arrow_down_rounded,
                               color: AppTheme.of(context).secondaryText,
@@ -379,68 +514,46 @@ class _HorariosPageWidgetState extends State<HorariosPageWidget> {
                 ),
               ),
               Expanded(
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    children: [
-                      _buildClassCard(
-                        context,
-                        'Advanced Calculus II',
-                        'MATH 251 • Section 001',
-                        '9:00 AM - 10:15 AM',
-                        'Cuneo Hall 203',
-                        'Prof. Dr. Martinez',
-                        'MON',
-                        '18',
-                        true,
-                        'In Progress',
-                        Icons.circle_rounded,
+                child: horariosFiltrados.isEmpty
+                    ? Center(
+                        child: Text(
+                          'No hay clases para este día',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      )
+                    : Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
+                        child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          itemCount: horariosFiltrados.length,
+                          itemBuilder: (context, index) {
+                            final horario = horariosFiltrados[index];
+                            final esEnProgreso = _esClaseEnProgreso(
+                              horario['horaInicio'],
+                              horario['horaFin'],
+                            );
+
+                            return _buildClassCard(
+                              context,
+                              horario['nombreMateria'],
+                              'Aula ${horario['aula']}',
+                              '${horario['horaInicio']} - ${horario['horaFin']}',
+                              'Aula ${horario['aula']}',
+                              '',
+                              _obtenerAbreviaturaDia(horario['diaNombre']),
+                              diaActual.toString(),
+                              esEnProgreso,
+                              esEnProgreso ? 'En Progreso' : 'Próximamente',
+                              esEnProgreso
+                                  ? Icons.circle_rounded
+                                  : Icons.schedule_rounded,
+                            );
+                          },
+                        ),
                       ),
-                      _buildClassCard(
-                        context,
-                        'Organic Chemistry Lab',
-                        'CHEM 344L • Section 002',
-                        '11:00 AM - 1:50 PM',
-                        'Flanner Hall B12',
-                        'Prof. Dr. Johnson',
-                        'MON',
-                        '18',
-                        false,
-                        'Upcoming',
-                        Icons.schedule_rounded,
-                      ),
-                      _buildClassCard(
-                        context,
-                        'Modern European History',
-                        'HIST 342 • Section 001',
-                        '2:00 PM - 3:15 PM',
-                        'DeBartolo Hall 101',
-                        'Prof. Dr. Williams',
-                        'MON',
-                        '18',
-                        false,
-                        'Upcoming',
-                        Icons.schedule_rounded,
-                      ),
-                      _buildClassCard(
-                        context,
-                        'Business Ethics Seminar',
-                        'PHIL 438 • Section 003',
-                        '4:00 PM - 5:15 PM',
-                        'Mendoza Hall 220',
-                        'Prof. Dr. Thompson',
-                        'MON',
-                        '18',
-                        false,
-                        'Upcoming',
-                        Icons.schedule_rounded,
-                      ),
-                    ],
-                  ),
-                ),
               ),
             ],
           ),
@@ -606,111 +719,112 @@ class _HorariosPageWidgetState extends State<HorariosPageWidget> {
                           : AppTheme.of(context).secondaryText,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            dayAbbr,
-                            textAlign: TextAlign.center,
-                            style: AppTheme.of(context).titleSmall.override(
-                                  font: GoogleFonts.interTight(
-                                    fontWeight: FontWeight.w600,
-                                    fontStyle: AppTheme.of(context)
-                                        .titleSmall
-                                        .fontStyle,
-                                  ),
-                                  color: Colors.white,
-                                  letterSpacing: 0.0,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          dayAbbr,
+                          textAlign: TextAlign.center,
+                          style: AppTheme.of(context).titleSmall.override(
+                                font: GoogleFonts.interTight(
                                   fontWeight: FontWeight.w600,
                                   fontStyle:
                                       AppTheme.of(context).titleSmall.fontStyle,
                                 ),
-                          ),
-                          Text(
-                            dayNumber,
-                            textAlign: TextAlign.center,
-                            style: AppTheme.of(context).headlineSmall.override(
-                                  font: GoogleFonts.interTight(
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: AppTheme.of(context)
-                                        .headlineSmall
-                                        .fontStyle,
-                                  ),
-                                  color: Colors.white,
-                                  letterSpacing: 0.0,
+                                color: Colors.white,
+                                fontSize: 10,
+                                letterSpacing: 0.0,
+                                fontWeight: FontWeight.w600,
+                                fontStyle:
+                                    AppTheme.of(context).titleSmall.fontStyle,
+                              ),
+                        ),
+                        Text(
+                          dayNumber,
+                          textAlign: TextAlign.center,
+                          style: AppTheme.of(context).headlineSmall.override(
+                                font: GoogleFonts.interTight(
                                   fontWeight: FontWeight.bold,
                                   fontStyle: AppTheme.of(context)
                                       .headlineSmall
                                       .fontStyle,
                                 ),
-                          ),
-                        ],
-                      ),
+                                color: Colors.white,
+                                fontSize: 18,
+                                letterSpacing: 0.0,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: AppTheme.of(context)
+                                    .headlineSmall
+                                    .fontStyle,
+                              ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 8),
-                child: Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: AppTheme.of(context).alternate,
+              if (professor.isNotEmpty) ...[
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 8),
+                  child: Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: AppTheme.of(context).alternate,
+                  ),
                 ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    professor,
-                    style: AppTheme.of(context).bodyMedium.override(
-                          font: GoogleFonts.inter(
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      professor,
+                      style: AppTheme.of(context).bodyMedium.override(
+                            font: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontStyle:
+                                  AppTheme.of(context).bodyMedium.fontStyle,
+                            ),
+                            color: AppTheme.of(context).primaryText,
+                            letterSpacing: 0.0,
                             fontWeight: FontWeight.w500,
                             fontStyle:
                                 AppTheme.of(context).bodyMedium.fontStyle,
                           ),
-                          color: AppTheme.of(context).primaryText,
-                          letterSpacing: 0.0,
-                          fontWeight: FontWeight.w500,
-                          fontStyle: AppTheme.of(context).bodyMedium.fontStyle,
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Icon(
+                          statusIcon,
+                          color: isActive
+                              ? Color(0xFF8C1D40)
+                              : AppTheme.of(context).secondaryText,
+                          size: 16,
                         ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Icon(
-                        statusIcon,
-                        color: isActive
-                            ? Color(0xFF8C1D40)
-                            : AppTheme.of(context).secondaryText,
-                        size: 16,
-                      ),
-                      SizedBox(width: 4),
-                      Text(
-                        statusText,
-                        style: AppTheme.of(context).bodySmall.override(
-                              font: GoogleFonts.inter(
+                        SizedBox(width: 4),
+                        Text(
+                          statusText,
+                          style: AppTheme.of(context).bodySmall.override(
+                                font: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w600,
+                                  fontStyle:
+                                      AppTheme.of(context).bodySmall.fontStyle,
+                                ),
+                                color: isActive
+                                    ? Color(0xFF8C1D40)
+                                    : AppTheme.of(context).secondaryText,
+                                letterSpacing: 0.0,
                                 fontWeight: FontWeight.w600,
                                 fontStyle:
                                     AppTheme.of(context).bodySmall.fontStyle,
                               ),
-                              color: isActive
-                                  ? Color(0xFF8C1D40)
-                                  : AppTheme.of(context).secondaryText,
-                              letterSpacing: 0.0,
-                              fontWeight: FontWeight.w600,
-                              fontStyle:
-                                  AppTheme.of(context).bodySmall.fontStyle,
-                            ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ],
           ),
         ),

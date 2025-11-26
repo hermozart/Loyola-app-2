@@ -160,7 +160,7 @@ class _OfertaAcademicaPageWidgetState extends State<OfertaAcademicaPageWidget> {
                         ],
                         onChanged: (val) =>
                             safeSetState(() => _model.dropDownValue1 = val),
-                        width: 120,
+                        width: 160,
                         height: 40,
                         textStyle: AppTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
@@ -203,7 +203,7 @@ class _OfertaAcademicaPageWidgetState extends State<OfertaAcademicaPageWidget> {
                         ],
                         onChanged: (val) =>
                             safeSetState(() => _model.dropDownValue2 = val),
-                        width: 100,
+                        width: 160,
                         height: 40,
                         textStyle: AppTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
@@ -246,7 +246,7 @@ class _OfertaAcademicaPageWidgetState extends State<OfertaAcademicaPageWidget> {
                         ],
                         onChanged: (val) =>
                             safeSetState(() => _model.dropDownValue3 = val),
-                        width: 110,
+                        width: 150,
                         height: 40,
                         textStyle: AppTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
