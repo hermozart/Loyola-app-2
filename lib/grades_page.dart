@@ -1,6 +1,8 @@
 import 'package:loyola_app22/app_components/app_theme.dart';
 import 'package:loyola_app22/app_components/app_util.dart';
 import 'package:loyola_app22/app_components/app_widgets.dart';
+import 'package:loyola_app22/services/auth_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -24,12 +26,21 @@ class GradesPageWidget extends StatefulWidget {
 class _GradesPageWidgetState extends State<GradesPageWidget> {
   late GradesPageModel _model;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final AuthService _authService = AuthService();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  List<Map<String, dynamic>> _materias = [];
+  String _periodoSeleccionado = 'Todas';
+  bool _cargando = true;
+  double _promedio = 0.0;
+  int _aprobadas = 0;
+  int _reprobadas = 0;
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => GradesPageModel());
-    SchedulerBinding.instance.addPostFrameCallback((_) async {});
+    _cargarNotas();
   }
 
   @override
@@ -38,8 +49,113 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
     super.dispose();
   }
 
+  Future<void> _cargarNotas() async {
+    try {
+      final carnet = await _authService.obtenerCarnetActual();
+      if (carnet == null) return;
+
+      final querySnapshot = await _firestore
+          .collection('estudiantes')
+          .where('numeroCarnet', isEqualTo: carnet)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) return;
+
+      final estudianteId = querySnapshot.docs.first.id;
+
+      final materiasSnapshot = await _firestore
+          .collection('estudiantes')
+          .doc(estudianteId)
+          .collection('materias')
+          .get();
+
+      List<Map<String, dynamic>> materiasList = [];
+      double sumaNotas = 0;
+      int totalCreditos = 0;
+      int aprobadas = 0;
+      int reprobadas = 0;
+
+      for (var doc in materiasSnapshot.docs) {
+        final data = doc.data();
+        final nota = (data['nota_final'] ?? 0).toDouble();
+        final creditos = (data['creditos'] ?? 0).toInt();
+        final estado = data['estado'] ?? '';
+
+        materiasList.add({
+          'id': doc.id,
+          'nombre_materia': data['nombre_materia'] ?? '',
+          'codigo_materia': data['codigo_materia'] ?? '',
+          'nota_final': nota,
+          'creditos': creditos,
+          'periodo': data['periodo'] ?? '',
+          'estado': estado,
+          'docente': data['docente'] ?? '',
+        });
+
+        sumaNotas += nota * creditos;
+        totalCreditos += creditos;
+
+        if (estado.toLowerCase() == 'aprobado') {
+          aprobadas++;
+        } else if (estado.toLowerCase() == 'reprobado') {
+          reprobadas++;
+        }
+      }
+
+      final promedio = totalCreditos > 0 ? sumaNotas / totalCreditos : 0.0;
+
+      setState(() {
+        _materias = materiasList;
+        _promedio = promedio;
+        _aprobadas = aprobadas;
+        _reprobadas = reprobadas;
+        _cargando = false;
+      });
+    } catch (e) {
+      print('Error cargando notas: $e');
+      setState(() {
+        _cargando = false;
+      });
+    }
+  }
+
+  List<Map<String, dynamic>> _filtrarMateriasPorPeriodo() {
+    if (_periodoSeleccionado == 'Todas') {
+      return _materias;
+    }
+    return _materias
+        .where((m) => m['periodo'] == _periodoSeleccionado)
+        .toList();
+  }
+
+  List<String> _obtenerPeriodosUnicos() {
+    final periodos =
+        _materias.map((m) => m['periodo'] as String).toSet().toList();
+    periodos.sort((a, b) => b.compareTo(a)); // Más reciente primero
+    return periodos;
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_cargando) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(0xFF8C1D2E),
+          title: Text(
+            'Calificaciones',
+            style: TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
+        ),
+        body: Center(
+          child: CircularProgressIndicator(color: Color(0xFF8C1D2E)),
+        ),
+      );
+    }
+
+    final materiasFiltradas = _filtrarMateriasPorPeriodo();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -104,6 +220,7 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
                       Expanded(
                         child: Container(
                           width: 100,
+                          height: 80,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow: [
@@ -122,7 +239,7 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '4.2',
+                                  _promedio.toStringAsFixed(1),
                                   textAlign: TextAlign.center,
                                   style: AppTheme.of(context)
                                       .headlineSmall
@@ -172,6 +289,7 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
                       Expanded(
                         child: Container(
                           width: 100,
+                          height: 80,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow: [
@@ -190,7 +308,7 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '12',
+                                  '$_aprobadas',
                                   textAlign: TextAlign.center,
                                   style: AppTheme.of(context)
                                       .headlineSmall
@@ -240,6 +358,7 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
                       Expanded(
                         child: Container(
                           width: 100,
+                          height: 80,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow: [
@@ -258,7 +377,7 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '1',
+                                  '$_reprobadas',
                                   textAlign: TextAlign.center,
                                   style: AppTheme.of(context)
                                       .headlineSmall
@@ -313,187 +432,148 @@ class _GradesPageWidgetState extends State<GradesPageWidget> {
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xFFA7173B),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
-                              child: Text(
-                                'Todas',
-                                style: AppTheme.of(context).bodyMedium.override(
-                                      font: GoogleFonts.inter(
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _periodoSeleccionado = 'Todas';
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: _periodoSeleccionado == 'Todas'
+                                    ? Color(0xFFA7173B)
+                                    : Color(0xFFF6F6F6),
+                                borderRadius: BorderRadius.circular(20),
+                                border: _periodoSeleccionado != 'Todas'
+                                    ? Border.all(
+                                        color: Color(0xFFE0E3E7),
+                                        width: 1,
+                                      )
+                                    : null,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16, 8, 16, 8),
+                                child: Text(
+                                  'Todas',
+                                  style: AppTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        font: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w600,
+                                          fontStyle: AppTheme.of(context)
+                                              .bodyMedium
+                                              .fontStyle,
+                                        ),
+                                        color: _periodoSeleccionado == 'Todas'
+                                            ? Colors.white
+                                            : Color(0xFF12151C),
+                                        fontSize: 14,
+                                        letterSpacing: 0.0,
                                         fontWeight: FontWeight.w600,
                                         fontStyle: AppTheme.of(context)
                                             .bodyMedium
                                             .fontStyle,
                                       ),
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w600,
-                                      fontStyle: AppTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
+                                ),
                               ),
                             ),
                           ),
-                          SizedBox(width: 12),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xFFF6F6F6),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: Color(0xFFE0E3E7),
-                                width: 1,
-                              ),
-                            ),
-                            child: Padding(
+                          ..._obtenerPeriodosUnicos().map((periodo) {
+                            return Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
-                              child: Text(
-                                '2025-1',
-                                style: AppTheme.of(context).bodyMedium.override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FontWeight.w500,
-                                        fontStyle: AppTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                      color: Color(0xFF12151C),
-                                      fontSize: 14,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: AppTheme.of(context)
+                                  EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _periodoSeleccionado = periodo;
+                                  });
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: _periodoSeleccionado == periodo
+                                        ? Color(0xFFA7173B)
+                                        : Color(0xFFF6F6F6),
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: _periodoSeleccionado != periodo
+                                        ? Border.all(
+                                            color: Color(0xFFE0E3E7),
+                                            width: 1,
+                                          )
+                                        : null,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        16, 8, 16, 8),
+                                    child: Text(
+                                      periodo,
+                                      style: AppTheme.of(context)
                                           .bodyMedium
-                                          .fontStyle,
+                                          .override(
+                                            font: GoogleFonts.inter(
+                                              fontWeight: FontWeight.w500,
+                                              fontStyle: AppTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                            ),
+                                            color:
+                                                _periodoSeleccionado == periodo
+                                                    ? Colors.white
+                                                    : Color(0xFF12151C),
+                                            fontSize: 14,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            fontStyle: AppTheme.of(context)
+                                                .bodyMedium
+                                                .fontStyle,
+                                          ),
                                     ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          SizedBox(width: 12),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xFFF6F6F6),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: Color(0xFFE0E3E7),
-                                width: 1,
-                              ),
-                            ),
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
-                              child: Text(
-                                '2024-2',
-                                style: AppTheme.of(context).bodyMedium.override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FontWeight.w500,
-                                        fontStyle: AppTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                      color: Color(0xFF12151C),
-                                      fontSize: 14,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: AppTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 12),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xFFF6F6F6),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: Color(0xFFE0E3E7),
-                                width: 1,
-                              ),
-                            ),
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
-                              child: Text(
-                                '2024-1',
-                                style: AppTheme.of(context).bodyMedium.override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FontWeight.w500,
-                                        fontStyle: AppTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                      color: Color(0xFF12151C),
-                                      fontSize: 14,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: AppTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                              ),
-                            ),
-                          ),
+                            );
+                          }).toList(),
                         ],
                       ),
                     ),
                   ),
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      _buildGradeCard(
-                        context,
-                        'Cálculo Diferencial',
-                        'Dr. García Martínez • Paralelo A',
-                        0.7,
-                        '70/100 puntos',
-                        '4.5',
-                        Color(0xFF02CA79),
-                      ),
-                      _buildGradeCard(
-                        context,
-                        'Física General',
-                        'Dra. López Silva • Paralelo B',
-                        0.85,
-                        '85/100 puntos',
-                        '4.8',
-                        Color(0xFF02CA79),
-                      ),
-                      _buildGradeCard(
-                        context,
-                        'Programación I',
-                        'Ing. Rodríguez Pérez • Paralelo C',
-                        0.92,
-                        '92/100 puntos',
-                        '5.0',
-                        Color(0xFF02CA79),
-                      ),
-                      _buildGradeCard(
-                        context,
-                        'Química Orgánica',
-                        'Dr. Morales Castro • Paralelo A',
-                        0.45,
-                        '45/100 puntos',
-                        '2.8',
-                        Color(0xFFE65454),
-                      ),
-                      _buildGradeCard(
-                        context,
-                        'Historia Universal',
-                        'Lic. Fernández Ruiz • Paralelo D',
-                        0.78,
-                        '78/100 puntos',
-                        '4.3',
-                        Color(0xFF02CA79),
-                      ),
-                    ],
-                  ),
+                  materiasFiltradas.isEmpty
+                      ? Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(32),
+                            child: Text(
+                              'No hay materias registradas',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: materiasFiltradas.map((materia) {
+                            final nota = materia['nota_final'] as double;
+                            final nombre = materia['nombre_materia'] as String;
+                            final docente = materia['docente'] as String;
+                            final estado = materia['estado'] as String;
+                            final progress = nota / 100;
+                            final gradeColor =
+                                estado.toLowerCase() == 'aprobado'
+                                    ? Color(0xFF02CA79)
+                                    : Color(0xFFE65454);
+
+                            return _buildGradeCard(
+                              context,
+                              nombre,
+                              docente,
+                              progress,
+                              '${nota.toInt()}/100 puntos',
+                              nota.toStringAsFixed(0),
+                              gradeColor,
+                            );
+                          }).toList(),
+                        ),
                 ]
                     .divide(SizedBox(height: 24))
                     .addToStart(SizedBox(height: 20))
